@@ -1,0 +1,97 @@
+<html>
+<head>
+	<title>JDownloader integration options</title>
+	<script type="text/javascript">
+	/* temporary variables (to permit saving only on button "Save") */
+	var accelShift, accelCtrl, accelAlt, accelKey;
+
+	/* accelerator saving callback. saves only to temporary variables */
+	function setAccelerator(event) {
+		event.preventDefault(); /* prevents writing to the text field */
+		accelAlt = event.altKey;
+		accelShift = event.shiftKey;
+		accelCtrl = event.ctrlKey;
+		accelKey = event.keyCode;
+		writeAccelerator();
+	}
+
+	/* writes accelerator in text form to the appropriate field */
+	function writeAccelerator() {
+		document.getElementById("other.accelerator").value = accelAlt ? "ALT " : "";
+		document.getElementById("other.accelerator").value += accelCtrl ? "CTRL " : "";
+		document.getElementById("other.accelerator").value += accelShift ? "SHIFT " : "";
+		document.getElementById("other.accelerator").value += String.fromCharCode(accelKey);
+	}
+
+	/* save options to local storage */
+	function save_options() {
+		/* save destination options */
+		var dest = document.destinationForm.destination;
+		for(var r = 0; r < dest.length; r++) {
+			if(dest[r].checked) {
+				localStorage["destination"] = dest[r].id;
+				break;
+			}
+		}
+
+		/* save "destinationPath" no matter what */
+		localStorage["destination.path"] = document.getElementById("destination.path").value;
+
+		/* save autostart option */ /* saves string, not boolean */
+		localStorage["other.autostart"] = document.getElementById("other.autostart").checked;
+
+		/* save "send links one by one" option */ /* saves string, not boolean */
+		localStorage["other.onebyone"] = document.getElementById("other.onebyone").checked;
+
+		/* save accelerator keys */
+		localStorage["accel.shift"] = accelShift;
+		localStorage["accel.ctrl"] = accelCtrl;
+		localStorage["accel.alt"] = accelAlt;
+		localStorage["accel.key"] = accelKey;
+
+		alert("Done!");
+	}
+
+	/* load options from local storage */
+	function load_options() {
+		/* load destination option */
+		document.getElementById(localStorage["destination"]).checked = true;
+		document.getElementById("destination.path").value = localStorage["destination.path"];
+
+		/* load autostart option */
+		document.getElementById("other.autostart").checked = localStorage["other.autostart"] == "true";
+
+		/* load "send links one by one" option */
+		document.getElementById("other.onebyone").checked = localStorage["other.onebyone"] == "true";
+
+		/* load accelerator */
+		accelAlt = localStorage["accel.alt"] == "true";
+		accelCtrl = localStorage["accel.ctrl"] == "true";
+		accelShift = localStorage["accel.shift"] == "true";
+		accelKey = localStorage["accel.key"];
+		writeAccelerator();
+	}
+	</script>
+</head>
+
+<body onload="load_options()">
+	<h1>JDownloader Chrome integration options</h1>
+	<form name="destinationForm">
+		<h2>File destination:</h2>
+		<input type="radio" name="destination" id="destination.default"> JDownloader's default<br/>
+		<input type="radio" name="destination" id="destination.specify"> Specify:
+			<input type="text" size="60" id="destination.path"><br/>
+		<input type="radio" name="destination" id="destination.ask" DISABLED> Always ask<br/>
+	</form>
+
+	<form name="otherForm">
+		<h2>Other:</h2>
+		Accelerator: <input type="text" size="20" id="other.accelerator" onkeydown="setAccelerator(event);"> <small>(Use with care, don't override. I have tested some invisible keys (space, enter, backspace), just didn't care to show them here...)</small><br />
+		<input type="checkbox" id="other.autostart"> Autostart<br />
+		<input type="checkbox" id="other.onebyone"> Send links one by one <small>(Less efficient, but could lead to more url detections. *Try* if you have problems)</small><br />
+	</form>
+
+	<button onClick="save_options()">Save</button>
+</body>
+</html>
+

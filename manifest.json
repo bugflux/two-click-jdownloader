@@ -1,0 +1,20 @@
+{
+	"name": "JDownloader Chrome integration",
+	"version": "0.1",
+	"description": "JDownloader support for Chrome",
+
+	"background_page": "background.html",
+	"options_page": "options.html",
+	"content_scripts": [ {
+		"all_frames": true,
+		"js": [ "script.js" ],
+		"matches": [ "http://*/*", "https://*/*", "ftp://*/*", "file:///*" ],
+		"run_at": "document_start"
+	} ],
+
+	"icons": {
+		"128": "icon128.png"
+	},
+
+	"permissions": [ "tabs", "http://127.0.0.1/*" ]
+}

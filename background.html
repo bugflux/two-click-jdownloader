@@ -1,0 +1,54 @@
+<script type="text/javascript">
+	/* set defaults */
+
+	/* accelerators */
+	if(localStorage["accel.alt"] == null) {
+		localStorage["accel.alt"] = "false";
+	}
+	if(localStorage["accel.ctrl"] == null) {
+		localStorage["accel.ctrl"] = "false";
+	}
+	if(localStorage["accel.shift"] == null) {
+		localStorage["accel.shift"] = "true";
+	}
+	if(localStorage["accel.key"] == null) {
+		localStorage["accel.key"] = 65; /* a */
+	}
+
+	/* destination */
+	if(localStorage["destination"] == null) {
+		localStorage["destination"] = "destination.default";
+	}
+	if(localStorage["destination.path"] == null) {
+		localStorage["destination.path"] = "";
+	}
+
+	/* other */
+	if(localStorage["other.autostart"] == null) {
+		localStorage["other.autostart"] = "true";
+	}
+	if(localStorage["other.onebyone"] == null) {
+		localStorage["other.onebyone"] = "false";
+	}
+
+	chrome.extension.onRequest.addListener(
+		function(request, sender, callback) {
+			if(request.command == "options") {
+				callback({
+						command : request.command,
+						destination : localStorage["destination"],
+						destinationPath : localStorage["destination.path"],
+						autostart : localStorage["other.autostart"] == "true",
+						oneByOne : localStorage["other.onebyone"] == "true",
+						accelKey : parseInt(localStorage["accel.key"]),
+						accelAlt : localStorage["accel.alt"] == "true",
+						accelCtrl : localStorage["accel.ctrl"] == "true",
+						accelShift : localStorage["accel.shift"] == "true"
+				});
+			}
+			else {
+				callback({});
+			}
+		}
+	);
+</script>

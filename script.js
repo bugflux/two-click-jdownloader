@@ -25,13 +25,14 @@ function acceleratorMatch(e) {
 function onAccelerator(event) {
 	if(acceleratorMatch(event)) {
 		var selection = window.getSelection();
-		var text = selection ? selection.toString() : "";
-
-		if(text.length == 0) {
+		if(selection) {
+			text = selection.toString();
+			console.log("got:\n" + text);
+		}
+		else {
+			console.log("no selection found");
 			return;
 		}
-
-		console.log("got:\n" + text);
 
 		/* extract urls */
 		var urls = text.match(/https?:\/\/.+\..+\s*/gi);

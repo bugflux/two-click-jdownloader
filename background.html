@@ -33,7 +33,7 @@
 
 	chrome.extension.onRequest.addListener(
 		function(request, sender, callback) {
-			if(request.command == "options") {
+			if(request.command == "getOptions") {
 				callback({
 						command : request.command,
 						destination : localStorage["destination"],

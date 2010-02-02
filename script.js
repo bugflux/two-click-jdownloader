@@ -1,9 +1,9 @@
-chrome.extension.sendRequest({command : "options"}, getOptions);
+chrome.extension.sendRequest({command : "getOptions"}, getOptions);
 document.addEventListener("keydown", onAccelerator, false);
 var destination, destinationPath, autostart, oneByOne, accelKey, accelAlt, accelCtrl, accelShift;
 
 function getOptions(response) {
-	if(response.command == "options") {
+	if(response.command == "getOptions") {
 			this.destination = response.destination;
 			this.destinationPath = response.destinationPath;
 			this.autostart = response.autostart;

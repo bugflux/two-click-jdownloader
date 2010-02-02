@@ -1,11 +1,12 @@
 chrome.extension.sendRequest({command : "getOptions"}, getOptions);
 document.addEventListener("keydown", onAccelerator, false);
-var destination, destinationPath, autostart, oneByOne, accelKey, accelAlt, accelCtrl, accelShift;
+var destination, destinationPath, dynamicPath, autostart, oneByOne, accelKey, accelAlt, accelCtrl, accelShift;
 
 function getOptions(response) {
 	if(response.command == "getOptions") {
 			this.destination = response.destination;
 			this.destinationPath = response.destinationPath;
+			this.dynamicPath = response.dynamicPath;
 			this.autostart = response.autostart;
 			this.oneByOne = response.oneByOne;
 			this.accelKey = response.accelKey;
@@ -54,6 +55,14 @@ function onAccelerator(event) {
 		var pdestinationpath = "";
 		if(destination == "destination.specify") {
 			pdestinationpath = "&dir=" + destinationPath;
+		}
+		else if(destination == "destination.ask") {
+			var tpath = prompt("Please select a destination path:", dynamicPath);
+			if(tpath.length != 0) {
+				dynamicPath = tpath;
+				chrome.extension.sendRequest({command : "saveDynamicPath", dynamicPath : dynamicPath});
+				pdestinationpath = "&dir=" + tpath;
+			}
 		}
 
 		/* set autostart argument */

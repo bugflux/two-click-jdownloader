@@ -22,6 +22,9 @@
 	if(localStorage["destination.path"] == null) {
 		localStorage["destination.path"] = "";
 	}
+	if(localStorage["destination.dpath"] == null) {
+		localStorage["destination.dpath"] = "";
+	}
 
 	/* other */
 	if(localStorage["other.autostart"] == null) {
@@ -38,6 +41,7 @@
 						command : request.command,
 						destination : localStorage["destination"],
 						destinationPath : localStorage["destination.path"],
+						dynamicPath : localStorage["destination.dpath"],
 						autostart : localStorage["other.autostart"] == "true",
 						oneByOne : localStorage["other.onebyone"] == "true",
 						accelKey : parseInt(localStorage["accel.key"]),
@@ -45,6 +49,10 @@
 						accelCtrl : localStorage["accel.ctrl"] == "true",
 						accelShift : localStorage["accel.shift"] == "true"
 				});
+			}
+			else if(request.command == "saveDynamicPath") {
+				localStorage["destination.dpath"] = request.dynamicPath;
+				callback({});
 			}
 			else {
 				callback({});

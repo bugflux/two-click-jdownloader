@@ -1,37 +1,35 @@
 <script type="text/javascript">
 	/* set defaults */
+	var current = 0.2;
 
-	/* accelerators */
-	if(localStorage["accel.alt"] == null) {
-		localStorage["accel.alt"] = "false";
-	}
-	if(localStorage["accel.ctrl"] == null) {
-		localStorage["accel.ctrl"] = "false";
-	}
-	if(localStorage["accel.shift"] == null) {
-		localStorage["accel.shift"] = "true";
-	}
-	if(localStorage["accel.key"] == null) {
+	/* if the settings were more thought out in the beginning this
+	would make a bit more sense, but we can safely assume that
+	having set the destination means the extension was installed.
+
+	then at version 0.2 dynamic destination was added, so
+	only that needs to be set. */
+
+	if(localStorage["destination"] == null) { /* first run */
+		/* accelerators */
+		localStorage["accel.alt"] = false;
+		localStorage["accel.ctrl"] = false;
+		localStorage["accel.shift"] = true;
 		localStorage["accel.key"] = 65; /* a */
-	}
 
-	/* destination */
-	if(localStorage["destination"] == null) {
+		/* destination */
 		localStorage["destination"] = "destination.default";
-	}
-	if(localStorage["destination.path"] == null) {
 		localStorage["destination.path"] = "";
-	}
-	if(localStorage["destination.dpath"] == null) {
 		localStorage["destination.dpath"] = "";
-	}
+		
+		/* other */
+		localStorage["other.autostart"] = true;
+		localStorage["other.onebyone"] = false;
 
-	/* other */
-	if(localStorage["other.autostart"] == null) {
-		localStorage["other.autostart"] = "true";
+		localStorage["version"] = current;
 	}
-	if(localStorage["other.onebyone"] == null) {
-		localStorage["other.onebyone"] = "false";
+	else if(localStorage["version"] != "0.2") { /* v < 0.2 */
+		localStorage["destination.dpath"] = "";
+		localStorage["version"] = current;
 	}
 
 	chrome.extension.onRequest.addListener(

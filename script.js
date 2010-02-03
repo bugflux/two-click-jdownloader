@@ -51,51 +51,55 @@ function onAccelerator(event) {
 			console.log(urls[r]);
 		}
 
-		/* set destination argument */
-		var pdestinationpath = "";
-		if(destination == "destination.specify") {
-			pdestinationpath = "&dir=" + destinationPath;
-		}
-		else if(destination == "destination.ask") {
-			var tpath = prompt("Please select a destination path:", dynamicPath);
-			if(tpath.length != 0) {
-				dynamicPath = tpath;
-				chrome.extension.sendRequest({command : "saveDynamicPath", dynamicPath : dynamicPath});
-				pdestinationpath = "&dir=" + tpath;
-			}
-		}
+		sendURLs(urls);
+	}
+}
 
-		/* set autostart argument */
-		var pautostart = "";
-		if(autostart) {
-			pautostart = "&autostart=1";
+function sendURLs(urls) {
+	/* set destination argument */
+	var pdestinationpath = "";
+	if(destination == "destination.specify") {
+		pdestinationpath = "&dir=" + destinationPath;
+	}
+	else if(destination == "destination.ask") {
+		var tpath = prompt("Please select a destination path:", dynamicPath);
+		if(tpath.length != 0) {
+			dynamicPath = tpath;
+			chrome.extension.sendRequest({command : "saveDynamicPath", dynamicPath : dynamicPath});
+			pdestinationpath = "&dir=" + tpath;
 		}
+	}
 
-		var request; /* easy on garbage collecting? */
-		var baseurl = "http://localhost:9666/flashgot?urls=";
-		if(oneByOne) {
-			/* send a request for each url */
-			for(var r = 0; r < urls.length; r++) {
-				request = baseurl + encodeURI(urls[r]) + pdestinationpath + pautostart;
+	/* set autostart argument */
+	var pautostart = "";
+	if(autostart) {
+		pautostart = "&autostart=1";
+	}
 
-				var xmlHttp = new XMLHttpRequest();
-				xmlHttp.open("GET", request, true);
-				xmlHttp.send(null);
-				console.log("sent [" + request + "]");
-			}
-		}
-		else {
-			/* join in one string */
-			urls = urls.join("\n");
-
-			/* set variables */
-			request = baseurl + encodeURI(urls) + pdestinationpath + pautostart;
+	var request; /* easy on garbage collecting? */
+	var baseurl = "http://localhost:9666/flashgot?urls=";
+	if(oneByOne) {
+		/* send a request for each url */
+		for(var r = 0; r < urls.length; r++) {
+			request = baseurl + encodeURI(urls[r]) + pdestinationpath + pautostart;
 
 			var xmlHttp = new XMLHttpRequest();
 			xmlHttp.open("GET", request, true);
 			xmlHttp.send(null);
-			console.log("sent [" + request + "]")
+			console.log("sent [" + request + "]");
 		}
+	}
+	else {
+		/* join in one string */
+		urls = urls.join("\n");
+
+		/* set variables */
+		request = baseurl + encodeURI(urls) + pdestinationpath + pautostart;
+
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open("GET", request, true);
+		xmlHttp.send(null);
+		console.log("sent [" + request + "]")
 	}
 }
 

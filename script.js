@@ -35,27 +35,38 @@ function onAccelerator(event) {
 			return;
 		}
 
-		/* extract urls */
-		var urls = text.match(/https?:\/\/.+\..+\s*/gi);
-		if(urls == null) {
-			console.log("no urls found");
-			return;
-		}
-		else {
-			console.log("found " + urls.length + " url(s):");
-		}
-
-		/* trim strings (match() already trims the beginning!) */
-		for(var r = 0; r < urls.length; r++) {
-			urls[r] = urls[r].replace(/\s*$/, "");
-			console.log(urls[r]);
-		}
-
-		sendURLs(urls);
+		sendURLs(extractURLs(text));
 	}
 }
 
+function extractURLs(text) {
+	if((text == null) || (text.length == 0)) {
+		return;
+	}
+
+	var urls = text.match(/https?:\/\/.+\..+\s*/gi);
+	if(urls == null) {
+		console.log("no urls found");
+		return;
+	}
+	else {
+		console.log("found " + urls.length + " url(s):");
+	}
+
+	/* trim strings (match() already trims the beginning!) */
+	for(var r = 0; r < urls.length; r++) {
+		urls[r] = urls[r].replace(/\s*$/, "");
+		console.log(urls[r]);
+	}
+
+	return urls;
+}
+
 function sendURLs(urls) {
+	if((urls == null) || (urls.length == 0)) {
+		return;
+	}
+
 	/* set destination argument */
 	var pdestinationpath = "";
 	if(destination == "destination.specify") {

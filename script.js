@@ -1,7 +1,15 @@
-chrome.extension.sendRequest({command : "getOptions"}, getOptions);
-document.addEventListener("keydown", onAccelerator, false);
+
+/* local variables */
 var destination, destinationPath, dynamicPath, autostart, oneByOne, accelKey, accelAlt, accelCtrl, accelShift;
 
+/* retrieve the user options */
+chrome.extension.sendRequest({command : "getOptions"}, getOptions);
+
+/* register event listeners */
+document.addEventListener("keydown", onAccelerator, false);
+
+/* callback for getOptions command message,
+ * saves the options in current variables */
 function getOptions(response) {
 	if(response.command == "getOptions") {
 			this.destination = response.destination;
@@ -16,6 +24,7 @@ function getOptions(response) {
 	}
 }
 
+/* checks if the pressed keys match the user defined */
 function acceleratorMatch(e) {
 	return e.keyCode == parseInt(accelKey)
 			&& e.altKey == accelAlt
@@ -23,6 +32,7 @@ function acceleratorMatch(e) {
 			&& e.shiftKey == accelShift;
 }
 
+/* callback for key press event */
 function onAccelerator(event) {
 	if(acceleratorMatch(event)) {
 		var selection = window.getSelection();
@@ -39,6 +49,7 @@ function onAccelerator(event) {
 	}
 }
 
+/* given a block of text return an array with all the found URLs or null, if none found */
 function extractURLs(text) {
 	if((text == null) || (text.length == 0)) {
 		return;
@@ -62,6 +73,7 @@ function extractURLs(text) {
 	return urls;
 }
 
+/* send the URLs, considering the user options */
 function sendURLs(urls) {
 	if((urls == null) || (urls.length == 0)) {
 		return;
@@ -107,6 +119,7 @@ function sendURLs(urls) {
 	}
 }
 
+/* send a request to JDownloader, ignore the answer */
 function xmlHttpSend(request) {
 	if((request == null) || (request.length == 0)) {
 		return;

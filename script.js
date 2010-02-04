@@ -14,15 +14,15 @@ document.addEventListener("keydown", onAccelerator, false);
  * saves the options in current variables */
 function getOptions(response) {
 	if(response.command == "getOptions") {
-			this.destination = response.destination;
-			this.destinationPath = response.destinationPath;
-			this.dynamicPath = response.dynamicPath;
-			this.autostart = response.autostart;
-			this.oneByOne = response.oneByOne;
-			this.accelKey = response.accelKey;
-			this.accelAlt = response.accelAlt;
-			this.accelCtrl = response.accelCtrl;
-			this.accelShift = response.accelShift;
+		this.destination = response.destination;
+		this.destinationPath = response.destinationPath;
+		this.dynamicPath = response.dynamicPath;
+		this.autostart = response.autostart;
+		this.oneByOne = response.oneByOne;
+		this.accelKey = response.accelKey;
+		this.accelAlt = response.accelAlt;
+		this.accelCtrl = response.accelCtrl;
+		this.accelShift = response.accelShift;
 	}
 }
 

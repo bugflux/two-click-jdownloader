@@ -1,6 +1,8 @@
 
+
 /* local variables */
 var destination, destinationPath, dynamicPath, autostart, oneByOne, accelKey, accelAlt, accelCtrl, accelShift;
+var baseurl = "http://localhost:9666/flashgot?urls=";
 
 /* retrieve the user options */
 chrome.extension.sendRequest({command : "getOptions"}, getOptions);
@@ -26,10 +28,10 @@ function getOptions(response) {
 
 /* checks if the pressed keys match the user defined */
 function acceleratorMatch(e) {
-	return e.keyCode == parseInt(accelKey)
-			&& e.altKey == accelAlt
-			&& e.ctrlKey == accelCtrl
-			&& e.shiftKey == accelShift;
+	return e.keyCode == this.accelKey
+			&& e.altKey == this.accelAlt
+			&& e.ctrlKey == this.accelCtrl
+			&& e.shiftKey == this.accelShift;
 }
 
 /* callback for key press event */
@@ -81,30 +83,28 @@ function sendURLs(urls) {
 
 	/* set destination argument */
 	var pdestinationpath = "";
-	if(destination == "destination.specify") {
-		pdestinationpath = "&dir=" + destinationPath;
+	if(this.destination == "destination.specify") {
+		pdestinationpath = "&dir=" + this.destinationPath;
 	}
-	else if(destination == "destination.ask") {
-		var tpath = prompt("Please select a destination path:", dynamicPath);
+	else if(this.destination == "destination.ask") {
+		var tpath = prompt("Please select a destination path:", this.dynamicPath);
 		if((tpath == null) || (tpath.length == 0)) {
 			console.log("no path specified: aborting");
 			return;
 		}
 
-		dynamicPath = tpath;
-		chrome.extension.sendRequest({command : "saveDynamicPath", dynamicPath : dynamicPath});
+		this.dynamicPath = tpath;
+		chrome.extension.sendRequest({command : "saveDynamicPath", dynamicPath : this.dynamicPath});
 		pdestinationpath = "&dir=" + tpath;
 	}
 
 	/* set autostart argument */
 	var pautostart = "";
-	if(autostart) {
+	if(this.autostart) {
 		pautostart = "&autostart=1";
 	}
 
-	var request; /* easy on garbage collecting? */
-	var baseurl = "http://localhost:9666/flashgot?urls=";
-	if(oneByOne) {
+	if(this.oneByOne) {
 		/* send a request for each url */
 		for(var r = 0; r < urls.length; r++) {
 			xmlHttpSend(baseurl + encodeURI(urls[r]) + pdestinationpath + pautostart);

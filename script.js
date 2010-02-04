@@ -74,11 +74,14 @@ function sendURLs(urls) {
 	}
 	else if(destination == "destination.ask") {
 		var tpath = prompt("Please select a destination path:", dynamicPath);
-		if(tpath.length != 0) {
-			dynamicPath = tpath;
-			chrome.extension.sendRequest({command : "saveDynamicPath", dynamicPath : dynamicPath});
-			pdestinationpath = "&dir=" + tpath;
+		if((tpath == null) || (tpath.length == 0)) {
+			console.log("no path specified: aborting");
+			return;
 		}
+
+		dynamicPath = tpath;
+		chrome.extension.sendRequest({command : "saveDynamicPath", dynamicPath : dynamicPath});
+		pdestinationpath = "&dir=" + tpath;
 	}
 
 	/* set autostart argument */
@@ -92,25 +95,25 @@ function sendURLs(urls) {
 	if(oneByOne) {
 		/* send a request for each url */
 		for(var r = 0; r < urls.length; r++) {
-			request = baseurl + encodeURI(urls[r]) + pdestinationpath + pautostart;
-
-			var xmlHttp = new XMLHttpRequest();
-			xmlHttp.open("GET", request, true);
-			xmlHttp.send(null);
-			console.log("sent [" + request + "]");
+			xmlHttpSend(baseurl + encodeURI(urls[r]) + pdestinationpath + pautostart);
 		}
 	}
 	else {
 		/* join in one string */
 		urls = urls.join("\n");
 
-		/* set variables */
-		request = baseurl + encodeURI(urls) + pdestinationpath + pautostart;
-
-		var xmlHttp = new XMLHttpRequest();
-		xmlHttp.open("GET", request, true);
-		xmlHttp.send(null);
-		console.log("sent [" + request + "]")
+		/* send */
+		xmlHttpSend(baseurl + encodeURI(urls) + pdestinationpath + pautostart);
 	}
 }
 
+function xmlHttpSend(request) {
+	if((request == null) || (request.length == 0)) {
+		return;
+	}
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("GET", request, true);
+	xmlHttp.send(null);
+	console.log("sent [" + request + "]");
+}

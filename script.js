@@ -35,9 +35,19 @@ function onAccelerator(event) {
 			return;
 		}
 
-		text = selection.toString();
+		/* get the text urls */
+		var text = selection.toString();
+		var urls = new Array();
 
-		sendUrls(extractUrls(text));
+		/* add the html urls */
+		for(var r = 0; r < document.links.length; r++) {
+			if(selection.containsNode(document.links[r], true)) { /* enirely */
+				urls.push(document.links[r].href);
+			}
+		}
+
+		/* append the text urls */
+		sendUrls(urls.concat(extractUrls(text)));
 	}
 }
 
@@ -65,7 +75,7 @@ function onDoubleClick(event) {
 		ptr = ptr.previousSibling;
 		if(ptr.nodeType == 3) { /* #text */
 			if(ptr.textContent.indexOf(host) != -1) {
-				hostUrls = hostUrls.concat(extractUrls(ptr.textContent));
+				hostUrls.push(extractUrls(ptr.textContent));
 				linkRangeStart = ptr;
 			}
 			else {
@@ -77,7 +87,7 @@ function onDoubleClick(event) {
 	do { /* go forth */
 		if(ptr.nodeType == 3) { /* #text */
 			if(ptr.textContent.indexOf(host) != -1) {
-				hostUrls = hostUrls.concat(extractUrls(ptr.textContent));
+				hostUrls.push(extractUrls(ptr.textContent));
 				linkRangeEnd = ptr;
 			}
 			else {

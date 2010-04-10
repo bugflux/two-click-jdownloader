@@ -7,11 +7,6 @@ var baseurl = "http://localhost:9666/flashgot?urls=";
 /* retrieve the user options */
 chrome.extension.sendRequest({command : "getOptions"}, getOptions);
 
-/* register event listeners */
-document.addEventListener("keydown", onAccelerator, false);
-document.addEventListener("dblclick", onDoubleClick, false);
-
-
 /* callback for getOptions command message,
  * saves the options in current variables */
 function getOptions(response) {
@@ -26,6 +21,10 @@ function getOptions(response) {
 		this.accelCtrl = response.accelCtrl;
 		this.accelShift = response.accelShift;
 	}
+
+	/* register event listeners */
+	document.addEventListener("keydown", onAccelerator, false);
+	document.addEventListener("dblclick", onDoubleClick, false);
 }
 
 /* callback for key press event */
@@ -37,9 +36,8 @@ function onAccelerator(event) {
 		}
 
 		text = selection.toString();
-		console.log("got:\n" + text);
 
-		sendURLs(extractURLs(text));
+		sendUrls(extractUrls(text));
 	}
 }
 
@@ -50,29 +48,53 @@ function onDoubleClick(event) {
 		return;
 	}
 
-	var host = extractHost(selection.focusNode.data);
+	/* extract the clicked host */
+	var host = extractHost(selection.anchorNode.textContent);
 	if((host == null) || (host.length == 0)) {
-		console.log("couldn't find host");
 		return;
 	}
 
-	console.log("selected host: " + host);
-
-	/* extract the URLs */
-	var text = selection.anchorNode.parentNode.innerText;
-	urls = extractURLs(text);
-
-	/* consider only the selected host */
+	/* select all links from the same host that are close to each other */
+	var ptr = selection.anchorNode;
 	var hostUrls = new Array();
-	for(var r = 0; r < urls.length; r++) {
-		if(urls[r].indexOf(host) != -1) {
-			hostUrls.push(urls[r]);
+
+	var linkRangeStart = ptr, linkRangeEnd = ptr;
+	var linkRange = document.createRange();
+
+	while(ptr.previousSibling != null) { /* go back */
+		ptr = ptr.previousSibling;
+		if(ptr.nodeType == 3) { /* #text */
+			if(ptr.textContent.indexOf(host) != -1) {
+				hostUrls = hostUrls.concat(extractUrls(ptr.textContent));
+				linkRangeStart = ptr;
+			}
+			else {
+				break;
+			}
 		}
 	}
+	ptr = selection.anchorNode; /* reset initial position */
+	do { /* go forth */
+		if(ptr.nodeType == 3) { /* #text */
+			if(ptr.textContent.indexOf(host) != -1) {
+				hostUrls = hostUrls.concat(extractUrls(ptr.textContent));
+				linkRangeEnd = ptr;
+			}
+			else {
+				break;
+			}
+		}
+		ptr = ptr.nextSibling;
+	} while(ptr != null);
 
-	sendURLs(hostUrls);
+	/* mark the collected links as a selection */
+	linkRange.setStartBefore(linkRangeStart);
+	linkRange.setEndAfter(linkRangeEnd);
+	selection.removeAllRanges();
+	selection.addRange(linkRange);
+
+	sendUrls(hostUrls);
 }
-
 
 /* checks if the pressed keys match the user defined */
 function acceleratorMatch(e) {
@@ -84,35 +106,33 @@ function acceleratorMatch(e) {
 
 /* extract a host from a URL */
 function extractHost(url) {
+	if((url == null) || (url.length == 0)) {
+		return;
+	}
 	return url.match(/https?:\/\/.+?\..+?\//i); /* shortest match */
 }
 
 /* given a block of text return an array with all the found URLs or null, if none found */
-function extractURLs(text) {
+function extractUrls(text) {
 	if((text == null) || (text.length == 0)) {
 		return;
 	}
 
-	var urls = text.match(/https?:\/\/.+\..+\s*/gi);
+	var urls = text.match(/https?:\/\/.+\.[^\s]+/gi);
 	if(urls == null) {
-		console.log("no urls found");
 		return;
-	}
-	else {
-		console.log("found " + urls.length + " url(s):");
 	}
 
 	/* trim strings (match() already trims the beginning!) */
 	for(var r = 0; r < urls.length; r++) {
 		urls[r] = urls[r].replace(/\s*$/, "");
-		console.log(urls[r]);
 	}
 
 	return urls;
 }
 
 /* send the URLs, considering the user options */
-function sendURLs(urls) {
+function sendUrls(urls) {
 	if((urls == null) || (urls.length == 0)) {
 		return;
 	}
@@ -125,7 +145,6 @@ function sendURLs(urls) {
 	else if(this.destination == "destination.ask") {
 		var tpath = prompt("Please select a destination path:", this.dynamicPath);
 		if((tpath == null) || (tpath.length == 0)) {
-			console.log("no path specified: aborting");
 			return;
 		}
 
@@ -164,5 +183,4 @@ function xmlHttpSend(request) {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("GET", request, true);
 	xmlHttp.send(null);
-	console.log("sent [" + request + "]");
 }

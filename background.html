@@ -1,13 +1,16 @@
 <script type="text/javascript">
 	/* set defaults */
-	var current = 0.2;
+	var current = 1.2;
 
 	/* if the settings were more thought out in the beginning this
 	would make a bit more sense, but we can safely assume that
 	having set the destination means the extension was installed.
 
 	then at version 0.2 dynamic destination was added, so
-	only that needs to be set. */
+	only that needs to be set
+	
+	at version 1.2 an option was added to allow disabling
+	the double-click action */
 
 	if(localStorage["destination"] == null) { /* first run */
 		/* accelerators */
@@ -22,15 +25,17 @@
 		localStorage["destination.dpath"] = "";
 		
 		/* other */
+		localStorage["other.doubleclick"] = true;
 		localStorage["other.autostart"] = true;
 		localStorage["other.onebyone"] = false;
-
-		localStorage["version"] = current;
 	}
-	else if(localStorage["version"] != "0.2") { /* v < 0.2 */
+	if(localStorage["version"] < 0.2) {
 		localStorage["destination.dpath"] = "";
-		localStorage["version"] = current;
 	}
+	if(localStorage["version"] < 1.2) {
+		localStorage["other.doubleclick"] = true;
+	}
+	localStorage["version"] = current;
 
 	chrome.extension.onRequest.addListener(
 		function(request, sender, callback) {
@@ -42,6 +47,7 @@
 						dynamicPath : localStorage["destination.dpath"],
 						autostart : localStorage["other.autostart"] == "true",
 						oneByOne : localStorage["other.onebyone"] == "true",
+						doubleClick : localStorage["other.doubleclick"] == "true",
 						accelKey : parseInt(localStorage["accel.key"]),
 						accelAlt : localStorage["accel.alt"] == "true",
 						accelCtrl : localStorage["accel.ctrl"] == "true",

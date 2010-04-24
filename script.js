@@ -1,7 +1,7 @@
 
 
 /* local variables */
-var destination, destinationPath, dynamicPath, autostart, oneByOne, accelKey, accelAlt, accelCtrl, accelShift;
+var destination, destinationPath, dynamicPath, autostart, oneByOne, accelKey, accelAlt, accelCtrl, accelShift, doubleClick;
 var baseurl = "http://localhost:9666/flashgot?urls=";
 
 /* retrieve the user options */
@@ -16,6 +16,7 @@ function getOptions(response) {
 		this.dynamicPath = response.dynamicPath;
 		this.autostart = response.autostart;
 		this.oneByOne = response.oneByOne;
+		this.doubleClick = response.doubleClick;
 		this.accelKey = response.accelKey;
 		this.accelAlt = response.accelAlt;
 		this.accelCtrl = response.accelCtrl;
@@ -24,7 +25,9 @@ function getOptions(response) {
 
 	/* register event listeners */
 	document.addEventListener("keydown", onAccelerator, false);
-	document.addEventListener("dblclick", onDoubleClick, false);
+	if(this.doubleClick) {
+		document.addEventListener("dblclick", onDoubleClick, false);
+	}
 }
 
 /* callback for key press event */

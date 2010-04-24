@@ -43,6 +43,9 @@
 		/* save "send links one by one" option */ /* saves string, not boolean */
 		localStorage["other.onebyone"] = document.getElementById("other.onebyone").checked;
 
+		/* enable/disable double-click */
+		localStorage["other.doubleclick"] = document.getElementById("other.doubleclick").checked;
+
 		/* save accelerator keys */
 		localStorage["accel.shift"] = accelShift;
 		localStorage["accel.ctrl"] = accelCtrl;
@@ -63,6 +66,9 @@
 
 		/* load "send links one by one" option */
 		document.getElementById("other.onebyone").checked = localStorage["other.onebyone"] == "true";
+
+		/* load doubleclick option */
+		document.getElementById("other.doubleclick").checked = localStorage["other.doubleclick"] == "true";
 
 		/* load accelerator */
 		accelAlt = localStorage["accel.alt"] == "true";
@@ -86,6 +92,7 @@
 
 	<form name="otherForm">
 		<h2>Other:</h2>
+		<input type="checkbox" id="other.doubleclick"> Enable double-clicking blocks of plaintext links to download them all<br />
 		Accelerator: <input type="text" size="20" id="other.accelerator" onkeydown="setAccelerator(event);"> <small>(Use with care, don't override. I have tested some invisible keys (space, enter, backspace), just didn't care to show them here...)</small><br />
 		<input type="checkbox" id="other.autostart"> Autostart<br />
 		<input type="checkbox" id="other.onebyone"> Send links one by one <small>(Less efficient, but could lead to more url detections. *Try* if you have problems)</small><br />

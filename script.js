@@ -30,6 +30,16 @@ function getOptions(response) {
 	}
 }
 
+function arrayContains(array, item) {
+	for(var r = 0; r < array.length; r++) {
+		if(array[r] == item) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 /* callback for key press event */
 function onAccelerator(event) {
 	if(acceleratorMatch(event)) {
@@ -40,17 +50,19 @@ function onAccelerator(event) {
 
 		/* get the text urls */
 		var text = selection.toString();
-		var urls = new Array();
+		var urls = extractUrls(text); //new Array();
 
 		/* add the html urls */
 		for(var r = 0; r < document.links.length; r++) {
 			if(selection.containsNode(document.links[r], true)) { /* enirely */
-				urls.push(document.links[r].href);
+				if(!arrayContains(urls, document.links[r].href)) {
+					urls.push(document.links[r].href);
+				}
 			}
 		}
 
 		/* append the text urls */
-		sendUrls(urls.concat(extractUrls(text)));
+		sendUrls(urls);
 	}
 }
 

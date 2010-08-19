@@ -31,9 +31,11 @@ function getOptions(response) {
 }
 
 function arrayContains(array, item) {
-	for(var r = 0; r < array.length; r++) {
-		if(array[r] == item) {
-			return true;
+	if((array != null) && (item != null)) {
+		for(var r = 0; r < array.length; r++) {
+			if(array[r] == item) {
+				return true;
+			}
 		}
 	}
 
@@ -50,7 +52,10 @@ function onAccelerator(event) {
 
 		/* get the text urls */
 		var text = selection.toString();
-		var urls = extractUrls(text); //new Array();
+		urls = extractUrls(text);
+		if(urls == null) {
+			urls = new Array();
+		}
 
 		/* add the html urls */
 		for(var r = 0; r < document.links.length; r++) {
@@ -61,7 +66,6 @@ function onAccelerator(event) {
 			}
 		}
 
-		/* append the text urls */
 		sendUrls(urls);
 	}
 }

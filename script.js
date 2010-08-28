@@ -2,7 +2,7 @@
 
 /* local variables */
 var destination, destinationPath, dynamicPath, autostart, oneByOne, accelKey, accelAlt, accelCtrl, accelShift, doubleClick;
-var baseurl = "http://localhost:9666/flashgot?urls=";
+var baseurl = "http://localhost:9666/flashgot?referer=" + document.URL + "&urls=";
 
 /* retrieve the user options */
 chrome.extension.sendRequest({command : "getOptions"}, getOptions);

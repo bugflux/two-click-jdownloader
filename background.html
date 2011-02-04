@@ -1,16 +1,6 @@
 <script type="text/javascript">
 	/* set defaults */
-	var current = 1.5;
-
-	/* if the settings were more thought out in the beginning this
-	would make a bit more sense, but we can safely assume that
-	having set the destination means the extension was installed.
-
-	then at version 0.2 dynamic destination was added, so
-	only that needs to be set
-	
-	at version 1.2 an option was added to allow disabling
-	the double-click action */
+	var currentVersion = 1.5;
 
 	if(localStorage["destination"] == null) { /* first run */
 		/* accelerators */
@@ -29,13 +19,7 @@
 		localStorage["other.autostart"] = true;
 		localStorage["other.onebyone"] = false;
 	}
-	if(localStorage["version"] < 0.2) {
-		localStorage["destination.dpath"] = "";
-	}
-	if(localStorage["version"] < 1.2) {
-		localStorage["other.doubleclick"] = true;
-	}
-	localStorage["version"] = current;
+	localStorage["version"] = currentVersion;
 
 	chrome.extension.onRequest.addListener(
 		function(request, sender, callback) {
@@ -56,9 +40,6 @@
 			}
 			else if(request.command == "saveDynamicPath") {
 				localStorage["destination.dpath"] = request.dynamicPath;
-				callback({});
-			}
-			else {
 				callback({});
 			}
 		}

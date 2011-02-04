@@ -16,5 +16,5 @@
 		"128": "icon128.png"
 	},
 
-	"permissions": [ "tabs", "http://127.0.0.1/*" ]
+	"permissions": [ "tabs", "contextMenus", "http://127.0.0.1/*", "http://localhost/*" ]
 }

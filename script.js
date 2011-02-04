@@ -1,8 +1,5 @@
-
-
-/* local variables */
-var destination, destinationPath, dynamicPath, autostart, oneByOne, accelKey, accelAlt, accelCtrl, accelShift, doubleClick;
-var baseurl = "http://localhost:9666/flashgot?referer=" + document.URL + "&urls=";
+/* option variables */
+var doubleClick, accelKey, accelAlt, accelCtrl, accelShift;
 
 /* retrieve the user options */
 chrome.extension.sendRequest({command : "getOptions"}, getOptions);
@@ -11,11 +8,6 @@ chrome.extension.sendRequest({command : "getOptions"}, getOptions);
  * saves the options in current variables */
 function getOptions(response) {
 	if(response.command == "getOptions") {
-		this.destination = response.destination;
-		this.destinationPath = response.destinationPath;
-		this.dynamicPath = response.dynamicPath;
-		this.autostart = response.autostart;
-		this.oneByOne = response.oneByOne;
 		this.doubleClick = response.doubleClick;
 		this.accelKey = response.accelKey;
 		this.accelAlt = response.accelAlt;
@@ -162,54 +154,9 @@ function extractUrls(text) {
 
 /* send the URLs, considering the user options */
 function sendUrls(urls) {
-	if((urls == null) || (urls.length == 0)) {
-		return;
-	}
-
-	/* set destination argument */
-	var pdestinationpath = "";
-	if(this.destination == "destination.specify") {
-		pdestinationpath = "&dir=" + this.destinationPath;
-	}
-	else if(this.destination == "destination.ask") {
-		var tpath = prompt("Please select a destination path:", this.dynamicPath);
-		if((tpath == null) || (tpath.length == 0)) {
-			return;
-		}
-
-		this.dynamicPath = tpath;
-		chrome.extension.sendRequest({command : "saveDynamicPath", dynamicPath : this.dynamicPath});
-		pdestinationpath = "&dir=" + tpath;
-	}
-
-	/* set autostart argument */
-	var pautostart = "";
-	if(this.autostart) {
-		pautostart = "&autostart=1";
-	}
-
-	if(this.oneByOne) {
-		/* send a request for each url */
-		for(var r = 0; r < urls.length; r++) {
-			xmlHttpSend(baseurl + encodeURI(urls[r]) + pdestinationpath + pautostart);
-		}
-	}
-	else {
-		/* join in one string */
-		urls = urls.join("\n");
-
-		/* send */
-		xmlHttpSend(baseurl + encodeURI(urls) + pdestinationpath + pautostart);
-	}
-}
-
-/* send a request to JDownloader, ignore the answer */
-function xmlHttpSend(request) {
-	if((request == null) || (request.length == 0)) {
-		return;
-	}
-
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("GET", request, true);
-	xmlHttp.send(null);
+	chrome.extension.sendRequest({
+				command : "sendUrls",
+				urls: urls,
+				referer: document.URL
+			});
 }

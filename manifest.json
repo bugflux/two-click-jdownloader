@@ -7,7 +7,7 @@
 	"options_page": "options.html",
 	"content_scripts": [ {
 		"all_frames": true,
-		"js": [ "script.js" ],
+		"js": [ "contentScript.js", "common.js" ],
 		"matches": [ "http://*/*", "https://*/*" ],
 		"run_at": "document_start"
 	} ],

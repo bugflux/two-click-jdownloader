@@ -1,5 +1,5 @@
 /* set defaults */
-var currentVersion = 1.5;
+var currentVersion = 1.9;
 
 if(localStorage["destination"] == null) { /* first run */
 	/* accelerators */

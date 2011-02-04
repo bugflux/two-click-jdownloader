@@ -59,7 +59,7 @@ function onAccelerator(event) {
 
 		/* add the html urls */
 		for(var r = 0; r < document.links.length; r++) {
-			if(selection.containsNode(document.links[r], true)) { /* enirely */
+			if(selection.containsNode(document.links[r], true)) { /* entirely */
 				if(!arrayContains(urls, document.links[r].href)) {
 					urls.push(document.links[r].href);
 				}

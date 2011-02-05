@@ -1,6 +1,7 @@
 <html>
 <head>
 	<title>JDownloader integration options</title>
+	<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
 	<script type="text/javascript" src="options.js"></script>
 </head>
 
@@ -16,15 +17,31 @@
 
 	<form name="controlsForm">
 		<h2>Controls</h2>
-		<input type="checkbox" id="controls.doubleclick"> Double-Clicking<br />
-		<input type="checkbox" id="controls.contextmenu"> Context Menu<br />
+		<input type="checkbox" id="controls.doubleclick"> Double-Clicking
+			<img id="info.doubleclick" src="info.png"
+			onmouseover="tooltipon('info.doubleclick');"
+			onmouseout="tooltipoff();"
+			alt="Double-Click a block of 'coded' links to JDownload them"><br />
+		<input type="checkbox" id="controls.contextmenu"> Context Menu
+			<img id="info.contextmenu" src="info.png"
+			onmouseover="tooltipon('info.contextmenu');"
+			onmouseout="tooltipoff();"
+			alt="Add a Right-Click option to send a selection or link to JDownloader"><br />
 		<input type="checkbox" id="controls.accelerator"> Hotkey: 
 			<input type="text" size="20" id="accelerator" onkeydown="setAccelerator(event);">
+			<img id="info.accelerator" src="info.png"
+			onmouseover="tooltipon('info.accelerator');"
+			onmouseout="tooltipoff();"
+			alt="Press a key combination to send the selected links to JDownloader">
 	</form>
 
 	<form name="otherForm">
 		<h2>Other:</h2>
-		<input type="checkbox" id="other.autostart"> Autostart<br />
+		<input type="checkbox" id="other.autostart"> Autostart
+			<img id="info.autostart" src="info.png"
+			onmouseover="tooltipon('info.autostart');"
+			onmouseout="tooltipoff();"
+			alt="Start added links immediately in JDownloader">
 	</form>
 
 	<button onClick="save_options()">Save</button>

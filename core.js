@@ -1,24 +1,41 @@
 /* set defaults */
-var currentVersion = 1.9;
+var currentVersion = "2.0";
 
-if(localStorage["destination"] == null) { /* first run */
-	/* accelerators */
-	localStorage["accel.alt"] = false;
-	localStorage["accel.ctrl"] = true;
-	localStorage["accel.shift"] = true;
-	localStorage["accel.key"] = 65; /* CTRL SHIFT a */
+if(localStorage["version"] != currentVersion) {
+	localStorage.clear();
+	localStorage["version"] = currentVersion;
+}
+if(localStorage["firstrun"] == null) {
+	localStorage["firstrun"] = false;
 
 	/* destination */
-	localStorage["destination"] = "destination.default";
-	localStorage["destination.path"] = "";
-	localStorage["destination.dpath"] = "";
+	localStorage["destination.type"] = "default"; /* "specify", "ask" */
+	localStorage["destination.path"] = ""; 
+	localStorage["destination.dynamicpath"] = ""; 
+
+	/* accelerators */
+	localStorage["accelerator.alt"] = false;
+	localStorage["accelerator.ctrl"] = true;
+	localStorage["accelerator.shift"] = true;
+	localStorage["accelerator.key"] = 65; /* CTRL SHIFT a */
 	
+	/* controls */
+	localStorage["controls.doubleclick"] = true;
+	localStorage["controls.contextmenu"] = true;
+	localStorage["controls.accelerator"] = true;
+
 	/* other */
-	localStorage["other.doubleclick"] = true;
 	localStorage["other.autostart"] = true;
-	localStorage["other.onebyone"] = false;
+
+	if(localStorage["version"] == "2.0") { // open the options page on 2.0 launch
+		chrome.tabs.getAllInWindow(
+					undefined,
+					function(tabs) {
+						chrome.tabs.create({url: "options.html", selected: true});
+					}
+				);
+	}
 }
-localStorage["version"] = currentVersion;
 
 /* handle communication with the contentscript */
 chrome.extension.onRequest.addListener(
@@ -26,34 +43,30 @@ chrome.extension.onRequest.addListener(
 		if(request.command == "getOptions") {
 			callback({
 					command: "getOptions",
-					doubleClick: localStorage["other.doubleclick"] == "true",
-					accelKey: parseInt(localStorage["accel.key"]),
-					accelAlt: localStorage["accel.alt"] == "true",
-					accelCtrl: localStorage["accel.ctrl"] == "true",
-					accelShift: localStorage["accel.shift"] == "true"
+					localStorage: localStorage
 				});
 		}
 		else if(request.command == "sendUrls") {
 			sendUrls(request.urls, request.referer);
-			// TODO: check if referer is actually needed!
 		}
 	}
 );
 
-
 /* create context menus */
-chrome.contextMenus.create({
-			"title": "Send to JDownloader",
-			"contexts": [ "selection", "link", "editable" ],
-			"onclick": onContextMenuClick
-		});
+if(localStorage["controls.contextmenu"] == "true") {
+	chrome.contextMenus.create({
+				"title": "Send to JDownloader",
+				"contexts": [ "selection", "link", "editable" ],
+				"onclick": onContextMenuClick
+			});
 
-function onContextMenuClick(info, tab) {
-	if(info.selectionText) {
-		sendUrls(extractUrls(info.selectionText), info.pageUrl);
-	}
-	else if(info.linkUrl) {
-		sendUrls([info.linkUrl], info.pageUrl);
+	function onContextMenuClick(info, tab) {
+		if(info.selectionText) {
+			sendUrls(extractUrls(info.selectionText), info.pageUrl);
+		}
+		else if(info.linkUrl) {
+			sendUrls([info.linkUrl], info.pageUrl);
+		}
 	}
 }
 
@@ -69,16 +82,16 @@ function sendUrls(urls, referer) {
 
 	/* set destination argument */
 	var pdestinationpath = "";
-	if(localStorage["destination"] == "destination.specify") {
-		pdestinationpath = "&dir=" + localStorage["destinationPath"];
+	if(localStorage["destination.type"] == "specify") {
+		pdestinationpath = "&dir=" + localStorage["destination.path"];
 	}
-	else if(localStorage["destination"] == "destination.ask") {
-		var tpath = prompt("Please select a destination path: ", localStorage["destination.dpath"]);
+	else if(localStorage["destination.type"] == "ask") {
+		var tpath = prompt("Please select a destination path: ", localStorage["destination.dynamicpath"]);
 		if((tpath == null) || (tpath.length <= 0)) {
 			return;
 		}
 
-		localStorage["destination.dpath"] = tpath;
+		localStorage["destination.dynamicpath"] = tpath;
 		pdestinationpath = "&dir=" + tpath;
 	}
 	
@@ -89,17 +102,8 @@ function sendUrls(urls, referer) {
 	}
 
 	/* send the urls */
-	if(localStorage["other.onebyone"] == "true") {
-		/* send a request for each url */
-		for(var r = 0; r < urls.length; r++) {
-			xmlHttpSend(baseurl + encodeURI(urls[r]) + pdestinationpath + pautostart);
-		}
-	}
-	else {
-		/* join in one string and send */
-		urls = urls.join("\n");
-		xmlHttpSend(baseurl + encodeURI(urls) + pdestinationpath + pautostart);
-	}
+	urls = urls.join("\n");
+	xmlHttpSend(baseurl + encodeURI(urls) + pdestinationpath + pautostart);
 }
 
 function xmlHttpSend(request) {

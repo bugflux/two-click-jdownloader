@@ -1,5 +1,5 @@
 /* option variables */
-var doubleClick, accelKey, accelAlt, accelCtrl, accelShift;
+var storage;
 
 /* retrieve the user options */
 chrome.extension.sendRequest({command : "getOptions"}, getOptions);
@@ -8,16 +8,14 @@ chrome.extension.sendRequest({command : "getOptions"}, getOptions);
  * saves the options in current variables */
 function getOptions(response) {
 	if(response.command == "getOptions") {
-		this.doubleClick = response.doubleClick;
-		this.accelKey = response.accelKey;
-		this.accelAlt = response.accelAlt;
-		this.accelCtrl = response.accelCtrl;
-		this.accelShift = response.accelShift;
+		storage = response.localStorage;
 	}
 
 	/* register event listeners */
-	document.addEventListener("keydown", onAccelerator, false);
-	if(this.doubleClick) {
+	if(storage["controls.accelerator"] == "true") {
+		document.addEventListener("keydown", onAccelerator, false);
+	}
+	if(storage["controls.doubleclick"] == "true") {
 		document.addEventListener("dblclick", onDoubleClick, false);
 	}
 }
@@ -119,10 +117,10 @@ function onDoubleClick(event) {
 
 /* checks if the pressed keys match the user defined */
 function acceleratorMatch(e) {
-	return e.keyCode == this.accelKey
-			&& e.altKey == this.accelAlt
-			&& e.ctrlKey == this.accelCtrl
-			&& e.shiftKey == this.accelShift;
+	return e.keyCode == storage["accelerator.key"]
+			&& e.altKey == (storage["accelerator.alt"] == "true")
+			&& e.ctrlKey == (storage["accelerator.ctrl"] == "true")
+			&& e.shiftKey == (storage["accelerator.shift"] == "true");
 }
 
 /* extract a host from a URL */

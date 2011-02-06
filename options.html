@@ -1,50 +1,89 @@
+<!DOCTYPE html>
 <html>
 <head>
-	<title>JDownloader integration options</title>
-	<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
-	<script type="text/javascript" src="options.js"></script>
+	<title>JDownloader settings</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
+	<script type="text/javascript" src="js/options.js"></script>
 </head>
 
-<body onload="load_options()">
-	<h1>JDownloader Chrome integration options</h1>
-	<form name="destinationForm">
-		<h2>File destination:</h2>
-		<input type="radio" name="destination" id="default"> JDownloader's default<br/>
-		<input type="radio" name="destination" id="ask"> Always ask<br />
-		<input type="radio" name="destination" id="specify"> Specify:
-			<input type="text" size="60" id="destination.path">
-	</form>
+<body onLoad="load_options()">
+<div class="total" id="total">
+<img class="row" src="png/arrow1.png">
+<img alt="JD.Chrome settings" class="title" src="png/title.png">
+<div class="container">
+	<div class="topo">
+	
+	</div>
+    
+	<div class="forms">    
+		<div class="form1">
+		<form name="destinationForm">
+			<h2>File destination</h2>
+			<input class="radio" type="radio" name="destination" id="default" onchange="save_options();"
+			onmouseover="tooltipon('default', 'Files will be downloaded to the folder JDownloader is configured to download to');"
+			onmouseout="tooltipoff();">
+			JDownloader's default
+			<br/>
 
-	<form name="controlsForm">
-		<h2>Controls</h2>
-		<input type="checkbox" id="controls.doubleclick"> Double-Clicking
-			<img id="info.doubleclick" src="info.png"
-			onmouseover="tooltipon('info.doubleclick');"
-			onmouseout="tooltipoff();"
-			alt="Double-Click a block of 'coded' links to JDownload them"><br />
-		<input type="checkbox" id="controls.contextmenu"> Context Menu
-			<img id="info.contextmenu" src="info.png"
-			onmouseover="tooltipon('info.contextmenu');"
-			onmouseout="tooltipoff();"
-			alt="Add a Right-Click option to send a selection or link to JDownloader"><br />
-		<input type="checkbox" id="controls.accelerator"> Hotkey: 
-			<input type="text" size="20" id="accelerator" onkeydown="setAccelerator(event);">
-			<img id="info.accelerator" src="info.png"
-			onmouseover="tooltipon('info.accelerator');"
-			onmouseout="tooltipoff();"
-			alt="Press a key combination to send the selected links to JDownloader">
-	</form>
+			<input class="radio" type="radio" name="destination" id="ask" onchange="save_options();"
+			onmouseover="tooltipon('ask', 'A popup will appear every time asking the path to save the file');"
+			onmouseout="tooltipoff();">
+			Always ask
+			<br />
 
-	<form name="otherForm">
-		<h2>Other:</h2>
-		<input type="checkbox" id="other.autostart"> Autostart
-			<img id="info.autostart" src="info.png"
-			onmouseover="tooltipon('info.autostart');"
-			onmouseout="tooltipoff();"
-			alt="Start added links immediately in JDownloader">
-	</form>
+			<input class="radio" type="radio" name="destination" id="specify" onchange="save_options();"
+			onmouseover="tooltipon('specify', 'Save links to this specific folder');"
+			onmouseout="tooltipoff();">
+			Specify:
+			<input class="text" type="text" id="destination.path" onkeyup="event.initKeyboardEvent(); save_options();">
+		</form>
+	</div>
+    <div class="form1">
+		<form name="controlsForm">
+			<h2>Controls</h2>
+			<input type="checkbox" class="checkbox" id="controls.doubleclick" onchange="save_options();"
+			onmouseover="tooltipon('controls.doubleclick', 'Double-Click a block of \'coded\' links to JDownload them');"
+			onmouseout="tooltipoff();">
+			Double-Clicking
+			<img class="info" id="info.alert.doubleclick" src="png/advert.png"
+			onmouseover="tooltipon('info.alert.doubleclick', 'Changing this is only effective on new or reloaded tabs');"
+			onmouseout="tooltipoff();" />
+			<br />
 
-	<button onClick="save_options()">Save</button>
+			<input type="checkbox" class="checkbox" id="controls.contextmenu" onchange="save_options();"
+			onmouseover="tooltipon('controls.contextmenu', 'Add a Right-Click option to send a selection or link to JDownloader');"
+			onmouseout="tooltipoff();">
+			Context Menu
+			<img class="info" id="info.alert.contextmenu" src="png/alert.png"
+			onmouseover="tooltipon('info.alert.contextmenu',
+			'Changing this is only effective when the extension is reloaded (ex: chrome restart)');"
+			onmouseout="tooltipoff();" />
+			<br />
+
+			<input type="checkbox" class="checkbox" id="controls.accelerator" onchange="save_options();"
+			onmouseover="tooltipon('controls.accelerator', 'Pressing this key combination will send the selected links to JDonwloader');"
+			onmouseout="tooltipoff();">
+			Hotkey:
+				<input type="text" class="text" id="accelerator" style="width: 120px" onkeydown="setAccelerator(event); save_options();">
+			<img class="info" id="info.alert.accelerator" src="png/advert.png"
+			onmouseover="tooltipon('info.alert.accelerator', 'Changing this is only effective on new or reloaded tabs');"
+			onmouseout="tooltipoff();" />
+		</form>
+    </div>
+	<div class="form2">
+		<form name="otherForm">
+			<h2>Other</h2>
+			<input type="checkbox" class="checkbox" id="other.autostart" onchange="save_options();"
+			onmouseover="tooltipon('other.autostart', 'Start downloads right away, instead of placing them in the grabber');"
+			onmouseout="tooltipoff();">
+			Autostart
+		</form>
+    </div>
+</div>
+</div>
+ <img class="arrow" src="png/arrow2.png">
+</div>
 </body>
 </html>
 

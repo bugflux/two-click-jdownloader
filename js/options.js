@@ -13,8 +13,17 @@ function setAccelerator(event) {
 				shift: event.shiftKey,
 				key: event.keyCode
 			};
-		writeAccelerator();
 	}
+	else {
+		accelerator = {
+			alt: false,
+			ctrl: false,
+			shift: false,
+			key: false
+		};
+	}
+
+	writeAccelerator();
 }
 
 /* writes accelerator in text form to the appropriate field */
@@ -27,9 +36,6 @@ function writeAccelerator() {
 
 /* save options to local storage */
 function save_options() {
-	var showWarning = false;
-	var fullRestart = false;
-
 	/* save destination options */
 	var dest = document.destinationForm.destination;
 	for(var r = 0; r < dest.length; r++) {
@@ -47,52 +53,18 @@ function save_options() {
 	var contextmenuSet = document.getElementById("controls.contextmenu").checked;
 	var acceleratorSet = document.getElementById("controls.accelerator").checked;
 
-	if((localStorage["controls.doubleclick"] == "true") != doubleclickSet) {
-		showWarning = true;
-		localStorage["controls.doubleclick"] = doubleclickSet;
-	}
-	if((localStorage["controls.contextmenu"] == "true") != contextmenuSet) {
-		showWarning = true;
-		fullRestart = true;
-		localStorage["controls.contextmenu"] = contextmenuSet;
-	}
-	if((localStorage["controls.accelerator"] == "true") != acceleratorSet) {
-		showWarning = true;
-		localStorage["controls.accelerator"] = acceleratorSet;
-	}
+	localStorage["controls.doubleclick"] = doubleclickSet;
+	localStorage["controls.contextmenu"] = contextmenuSet;
+	localStorage["controls.accelerator"] = acceleratorSet;
 
 	/* save accelerator keys */
-	if((localStorage["accelerator.alt"] == "true") != accelerator.alt) {
-		showWarning = true;
-		localStorage["accelerator.alt"] = accelerator.alt;
-	}
-	if((localStorage["accelerator.ctrl"] == "true") != accelerator.ctrl) {
-		showWarning = true;
-		localStorage["accelerator.ctrl"] = accelerator.ctrl;
-	}
-	if((localStorage["accelerator.shift"] == "true") != accelerator.shift) {
-		showWarning = true;
-		localStorage["accelerator.shift"] = accelerator.shift;
-	}
-	if(localStorage["accelerator.key"] != accelerator.key) {
-		showWarning = true;
-		localStorage["accelerator.key"] = accelerator.key;
-	}
+	localStorage["accelerator.alt"] = accelerator.alt;
+	localStorage["accelerator.ctrl"] = accelerator.ctrl;
+	localStorage["accelerator.shift"] = accelerator.shift;
+	localStorage["accelerator.key"] = accelerator.key;
 
 	/* save autostart option */
 	localStorage["other.autostart"] = document.getElementById("other.autostart").checked;
-
-	if(showWarning) {
-		if(fullRestart) {
-			alert("Changes will effect when the plugin is reloaded! (chrome restart)");
-		}
-		else {
-			alert("Done!\nEffective on new/reloaded tabs.");
-		}
-	}
-	else {
-		alert("done!");
-	}
 }
 
 /* load options from local storage */
@@ -120,21 +92,39 @@ function load_options() {
 }
 
 
-function tooltipon(id) {
+var father;
+function tooltipon(id, tip) {
 	var tooltipImg = document.getElementById(id);
+
+	var tooltipSeta = document.createElement("img");
+	tooltipSeta.setAttribute("id", "tooltipseta");
+	tooltipSeta.src = "png/seta.png";
+
 	var tooltipDiv = document.createElement("div");
 	tooltipDiv.setAttribute("id", "tooltipdiv");
 
 	var pos = getElementAbsolutePosition(tooltipImg);
-	tooltipDiv.style.left = pos.x + tooltipImg.width;
-	tooltipDiv.style.top = pos.y;
+	pos.x = pos.x + tooltipImg.clientWidth;
+	pos.y = pos.y;
 
-	tooltipDiv.innerHTML = tooltipImg.alt;
-	document.body.appendChild(tooltipDiv);
+	tooltipSeta.style.position = "fixed";
+	tooltipSeta.style.left = pos.x + "px";
+	tooltipSeta.style.top = pos.y + "px";
+
+	tooltipDiv.style.position = "fixed";
+	tooltipDiv.style.left = (pos.x + tooltipSeta.width) + "px";
+	tooltipDiv.style.top = (pos.y - 10) + "px";
+
+	tooltipDiv.innerHTML = tip;
+
+	father = document.getElementById("total");
+	father.appendChild(tooltipSeta);
+	father.appendChild(tooltipDiv);
 }
 
 function tooltipoff() {
-	document.body.removeChild(document.getElementById("tooltipdiv"));
+	father.removeChild(document.getElementById("tooltipdiv"));
+	father.removeChild(document.getElementById("tooltipseta"));
 }
 
 function getElementAbsolutePosition(element) {

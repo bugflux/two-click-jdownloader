@@ -1,0 +1,125 @@
+@charset "UTF-8";
+/* CSS Document */
+
+body {
+	background-color:#e6ac02;
+	color:#333;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:11px;
+	margin-top:20px;
+}
+
+.total {
+	margin:auto;
+	width:780px;
+	height:430px;
+	padding-right:20px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	background-color:#E9FFFF;
+
+   -moz-box-shadow: 0px 0px 10px 5px #D38200;
+   -webkit-box-shadow:  0px 0px 10px 5px #D38200;
+}
+
+.container {
+	padding:20px 0px 0px 50px;
+}
+
+.title {
+	padding-bottom:20px;
+	padding-top:20px;
+	color:#2e9834;
+	font-size:26px;
+	float:right;
+}
+
+.options {
+	clear:both;
+	padding-top:30px;
+}
+
+.formoptions {
+	clear:both;
+	padding-top:10px;
+}
+
+h2 {
+	padding-top:20px;
+	font-size:13px;
+	color:#e6ac02;
+	letter-spacing:1px;
+}
+
+.logojd {
+	padding-right:50px;
+	float:left;
+}
+
+input.text {
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	background-color:#efefef;
+	border:1px solid #00CBFF;
+	padding:2px;
+}
+
+.forms {
+	clear:both;
+}
+.form1 {
+	float:left;
+	padding-right:60px;
+}
+
+.form2 {
+	float:left;
+	padding-right:0px;
+}
+
+button {
+	border:none;
+}
+
+.radio {
+	margin-top:9px;
+}
+
+.btn {
+	clear:both;
+	float:right;
+	padding-right:30px;
+	padding-top:30px;
+}
+
+.buttonsave {
+	background-color:#2e9834;
+	padding:5px;
+	color:#FFF;
+	cursor:pointer;
+}
+
+.info {
+	vertical-align:text-top;
+}
+
+input.checkbox {
+	margin-top:8px;
+}
+
+#tooltipdiv {
+	display: block;
+	padding:5px 10px 5px 10px;
+	font-size:10px;
+	background-color:#EEE;
+	border:1px #00CBFF solid;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	width:100px;
+	text-transform:lowercase;
+	word-wrap:break-word;
+}
+

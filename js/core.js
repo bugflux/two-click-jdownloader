@@ -111,7 +111,6 @@ function xmlHttpSend(request) {
 		return;
 	}
 
-	console.log(request);
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("GET", request, false);
 	xmlHttp.send(null);

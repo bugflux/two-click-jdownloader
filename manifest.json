@@ -7,13 +7,13 @@
 	"options_page": "options.html",
 	"content_scripts": [ {
 		"all_frames": true,
-		"js": [ "contentScript.js", "common.js" ],
+		"js": [ "js/contentScript.js", "js/common.js" ],
 		"matches": [ "http://*/*", "https://*/*" ],
 		"run_at": "document_start"
 	} ],
 
 	"icons": {
-		"128": "icon128.png"
+		"128": "png/icon128.png"
 	},
 
 	"permissions": [ "tabs", "contextMenus", "http://127.0.0.1/*", "http://localhost/*" ]

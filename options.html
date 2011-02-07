@@ -9,7 +9,7 @@
 
 <body onLoad="load_options()">
 <div class="total" id="total">
-<img class="row" src="png/arrow1.png">
+<img src="png/arrow1.png">
 <img alt="JD.Chrome settings" class="title" src="png/title.png">
 <div class="container">
 	<div class="topo">
@@ -20,29 +20,29 @@
 		<div class="form1">
 		<form name="destinationForm">
 			<h2>File destination</h2>
-			<input class="radio" type="radio" name="destination" id="default" onchange="save_options();"
+			<input class="radio" type="radio" name="destination" id="default" onChange="save_options();"
 			onmouseover="tooltipon('default', 'Files will be downloaded to the folder JDownloader is configured to download to');"
 			onmouseout="tooltipoff();">
 			JDownloader's default
 			<br/>
 
-			<input class="radio" type="radio" name="destination" id="ask" onchange="save_options();"
+			<input class="radio" type="radio" name="destination" id="ask" onChange="save_options();"
 			onmouseover="tooltipon('ask', 'A popup will appear every time asking the path to save the file');"
 			onmouseout="tooltipoff();">
 			Always ask
 			<br />
 
-			<input class="radio" type="radio" name="destination" id="specify" onchange="save_options();"
+			<input class="radio" type="radio" name="destination" id="specify" onChange="save_options();"
 			onmouseover="tooltipon('specify', 'Save links to this specific folder');"
 			onmouseout="tooltipoff();">
 			Specify:
-			<input class="text" type="text" id="destination.path" onkeyup="event.initKeyboardEvent(); save_options();">
+			<input class="text" type="text" id="destination.path" onKeyUp="event.initKeyboardEvent(); save_options();">
 		</form>
 	</div>
     <div class="form1">
 		<form name="controlsForm">
 			<h2>Controls</h2>
-			<input type="checkbox" class="checkbox" id="controls.doubleclick" onchange="save_options();"
+			<input type="checkbox" class="checkbox" id="controls.doubleclick" onChange="save_options();"
 			onmouseover="tooltipon('controls.doubleclick', 'Double-Click a block of \'coded\' links to JDownload them');"
 			onmouseout="tooltipoff();">
 			Double-Clicking
@@ -51,7 +51,7 @@
 			onmouseout="tooltipoff();" />
 			<br />
 
-			<input type="checkbox" class="checkbox" id="controls.contextmenu" onchange="save_options();"
+			<input type="checkbox" class="checkbox" id="controls.contextmenu" onChange="save_options();"
 			onmouseover="tooltipon('controls.contextmenu', 'Add a Right-Click option to send a selection or link to JDownloader');"
 			onmouseout="tooltipoff();">
 			Context Menu
@@ -61,11 +61,11 @@
 			onmouseout="tooltipoff();" />
 			<br />
 
-			<input type="checkbox" class="checkbox" id="controls.accelerator" onchange="save_options();"
+			<input type="checkbox" class="checkbox" id="controls.accelerator" onChange="save_options();"
 			onmouseover="tooltipon('controls.accelerator', 'Pressing this key combination will send the selected links to JDonwloader');"
 			onmouseout="tooltipoff();">
 			Hotkey:
-				<input type="text" class="text" id="accelerator" style="width: 120px" onkeydown="setAccelerator(event); save_options();">
+				<input type="text" class="text" id="accelerator" style="width: 120px" onKeyDown="setAccelerator(event); save_options();">
 			<img class="info" id="info.alert.accelerator" src="png/advert.png"
 			onmouseover="tooltipon('info.alert.accelerator', 'Changing this is only effective on new or reloaded tabs');"
 			onmouseout="tooltipoff();" />
@@ -74,7 +74,7 @@
 	<div class="form2">
 		<form name="otherForm">
 			<h2>Other</h2>
-			<input type="checkbox" class="checkbox" id="other.autostart" onchange="save_options();"
+			<input type="checkbox" class="checkbox" id="other.autostart" onChange="save_options();"
 			onmouseover="tooltipon('other.autostart', 'Start downloads right away, instead of placing them in the grabber');"
 			onmouseout="tooltipoff();">
 			Autostart
@@ -82,7 +82,9 @@
     </div>
 </div>
 </div>
- <img class="arrow" src="png/arrow2.png">
+<div class="arrow2"><img src="png/arrow2.png"></div>
+<div class="footer" alt="design by carla leite copyright 2011"><a href="mailto:carla.v.leite@gmail.com">design by CarlaLeite &copy; 2011</a></div>
+
 </div>
 </body>
 </html>

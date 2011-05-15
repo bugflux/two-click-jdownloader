@@ -1,5 +1,5 @@
 /* set defaults */
-var currentVersion = '2.1';
+var currentVersion = '2.2';
 
 if(localStorage['version'] != currentVersion) {
 	localStorage.clear();
@@ -26,7 +26,7 @@ if(localStorage['firstrun'] == null) {
 	/* other */
 	localStorage['other.autostart'] = true;
 
-	if(localStorage['version'] == '2.1') { // open the options page on new version launch
+	if(localStorage['version'] == '2.2') { // open the options page on new version launch
 		chrome.tabs.getAllInWindow(
 					undefined,
 					function(tabs) {
@@ -78,12 +78,14 @@ function sendUrls(urls) {
 
 	var baseurl = 'http://' + localStorage['destination.address']
 		+ ':' + localStorage['destination.port']
-		+ '/action/add/links/grabber0/';
+		+ '/action/add/links/grabber0/start';
 
 	/* set autostart argument */
 	var pautostart = '';
 	if(localStorage['other.autostart'] == 'true') {
-		baseurl += 'start1/';
+		baseurl += '1/';
+	} else {
+		baseurl += '0/';
 	}
 
 	/* send the urls */

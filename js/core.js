@@ -26,7 +26,7 @@ if(localStorage['firstrun'] == null) {
 	/* other */
 	localStorage['other.autostart'] = true;
 
-	if(localStorage['version'] == '2.1') { // open the options page on 2.0 launch
+	if(localStorage['version'] == '2.1') { // open the options page on new version launch
 		chrome.tabs.getAllInWindow(
 					undefined,
 					function(tabs) {

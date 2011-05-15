@@ -12,7 +12,7 @@ function extractUrls(text) {
 
 	/* trim strings (match() already trims the beginning!) */
 	for(var r = 0; r < urls.length; r++) {
-		urls[r] = urls[r].replace(/\s*$/, "");
+		urls[r] = urls[r].replace(/\s*$/, '');
 	}
 
 	return urls;

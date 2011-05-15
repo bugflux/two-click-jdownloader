@@ -87,10 +87,11 @@ function sendUrls(urls) {
 	}
 
 	/* send the urls */
-/*	for(var r = 0; r < urls.length; r++) {
+	// one by one because JD is buggy
+	for(var r = 0; r < urls.length; r++) {
 		xmlHttpSend(baseurl + urls[r]);
-	}*/
-	xmlHttpSend(baseurl + urls.join(' '));
+	}
+	//xmlHttpSend(baseurl + urls.join(' '));
 }
 
 function xmlHttpSend(request) {

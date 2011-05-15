@@ -37,9 +37,8 @@ function writeAccelerator() {
 /* save options to local storage */
 function save_options() {
 	/* save destination options */
-	var dest = document.destinationForm.destination;
 	var destinationPort = document.getElementById('destination.port').value;
-	if(!isNaN(destinationPort) || destinationPort < 1 || destinationPort > 65535) {
+	if(isNaN(destinationPort) || destinationPort < 1 || destinationPort > 65535) {
 		alert('Invalid port number specified!');
 	} else {
 		localStorage['destination.port'] = destinationPort;

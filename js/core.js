@@ -46,7 +46,7 @@ chrome.extension.onRequest.addListener(
 				});
 		}
 		else if(request.command == 'sendUrls') {
-			sendUrls(request.urls, request.referer);
+			sendUrls(request.urls);
 		}
 	}
 );
@@ -61,22 +61,21 @@ if(localStorage['controls.contextmenu'] == 'true') {
 
 	function onContextMenuClick(info, tab) {
 		if(info.selectionText) {
-			sendUrls(extractUrls(info.selectionText), info.pageUrl);
+			sendUrls(extractUrls(info.selectionText));
 		}
 		else if(info.linkUrl) {
-			sendUrls([info.linkUrl], info.pageUrl);
+			sendUrls([info.linkUrl]);
 		}
 	}
 }
 
 
 /* send a bunch of links, considering the user's settings */
-function sendUrls(urls, referer) {
+function sendUrls(urls) {
 	if((urls == null) || (urls.length <= 0)) {
 		return;
 	}
 
-	/* set the referer */
 	var baseurl = 'http://' + localStorage['destination.address']
 		+ ':' + localStorage['destination.port']
 		+ '/action/add/links/grabber0/';
@@ -88,8 +87,10 @@ function sendUrls(urls, referer) {
 	}
 
 	/* send the urls */
-	urls = urls.join(' ');
-	xmlHttpSend(baseurl + encodeURI(urls));
+/*	for(var r = 0; r < urls.length; r++) {
+		xmlHttpSend(baseurl + urls[r]);
+	}*/
+	xmlHttpSend(baseurl + urls.join(' '));
 }
 
 function xmlHttpSend(request) {

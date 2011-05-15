@@ -84,7 +84,7 @@ function onDoubleClick(event) {
 		ptr = ptr.previousSibling;
 		if(ptr.nodeType == 3) { /* #text */
 			if(ptr.textContent.indexOf(host) != -1) {
-				hostUrls.push(extractUrls(ptr.textContent));
+				hostUrls = hostUrls.concat(extractUrls(ptr.textContent));
 				linkRangeStart = ptr;
 			}
 			else {
@@ -96,7 +96,7 @@ function onDoubleClick(event) {
 	do { /* go forth */
 		if(ptr.nodeType == 3) { /* #text */
 			if(ptr.textContent.indexOf(host) != -1) {
-				hostUrls.push(extractUrls(ptr.textContent));
+				hostUrls = hostUrls.concat(extractUrls(ptr.textContent));
 				linkRangeEnd = ptr;
 			}
 			else {
@@ -135,8 +135,7 @@ function extractHost(url) {
 function sendUrls(urls) {
 	chrome.extension.sendRequest({
 				command : 'sendUrls',
-				urls: urls,
-				referer: document.URL
+				urls: urls
 			});
 }
 

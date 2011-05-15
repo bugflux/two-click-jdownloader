@@ -38,15 +38,19 @@ function writeAccelerator() {
 function save_options() {
 	/* save destination options */
 	var dest = document.destinationForm.destination;
-	for(var r = 0; r < dest.length; r++) {
-		if(dest[r].checked) {
-			localStorage["destination.type"] = dest[r].id;
-			break;
-		}
+	var destinationPort = document.getElementById("destination.port").value;
+	if(!isNaN(destinationPort) || destinationPort < 1 || destinationPort > 65535) {
+		alert("Invalid port number specified!");
+	} else {
+		localStorage["destination.port"] = destinationPort;
 	}
 
-	/* save "destinationPath" no matter what */
-	localStorage["destination.path"] = document.getElementById("destination.path").value;
+	var destinationAddress = document.getElementById("destination.address").value;
+	if(!destinationAddress || destinationAddress.length == 0) {
+		localStorage["destination.address"] = '127.0.0.1';
+	} else {
+		localStorage["destination.address"] = destinationAddress;
+	}
 
 	/* enable/disable controls */
 	var doubleclickSet = document.getElementById("controls.doubleclick").checked;
@@ -70,8 +74,8 @@ function save_options() {
 /* load options from local storage */
 function load_options() {
 	/* load destination option */
-	document.getElementById(localStorage["destination.type"]).checked = true;
-	document.getElementById("destination.path").value = localStorage["destination.path"];
+	document.getElementById("destination.port").value = localStorage["destination.port"];
+	document.getElementById("destination.address").value = localStorage["destination.address"];
 
 	/* load doubleclick option */
 	document.getElementById("controls.doubleclick").checked = localStorage["controls.doubleclick"] == "true";

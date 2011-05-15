@@ -1,5 +1,5 @@
 /* set defaults */
-var currentVersion = "2.0";
+var currentVersion = "2.1";
 
 if(localStorage["version"] != currentVersion) {
 	localStorage.clear();
@@ -9,9 +9,8 @@ if(localStorage["firstrun"] == null) {
 	localStorage["firstrun"] = false;
 
 	/* destination */
-	localStorage["destination.type"] = "default"; /* "specify", "ask" */
-	localStorage["destination.path"] = ""; 
-	localStorage["destination.dynamicpath"] = ""; 
+	localStorage["destination.port"] = "10025"; /* "specify", "ask" */
+	localStorage["destination.address"] = "127.0.0.1"; 
 
 	/* accelerators */
 	localStorage["accelerator.alt"] = false;
@@ -27,7 +26,7 @@ if(localStorage["firstrun"] == null) {
 	/* other */
 	localStorage["other.autostart"] = true;
 
-	if(localStorage["version"] == "2.0") { // open the options page on 2.0 launch
+	if(localStorage["version"] == "2.1") { // open the options page on 2.0 launch
 		chrome.tabs.getAllInWindow(
 					undefined,
 					function(tabs) {
@@ -78,32 +77,19 @@ function sendUrls(urls, referer) {
 	}
 
 	/* set the referer */
-	var baseurl = "http://127.0.0.1:9666/flashgot?referer=" + referer + "&urls=";
+	var baseurl = "http://" + localStorage["destination.address"]
+		+ ":" + localStorage["destination.port"]
+		+ "/action/add/links/grabber0/";
 
-	/* set destination argument */
-	var pdestinationpath = "";
-	if(localStorage["destination.type"] == "specify") {
-		pdestinationpath = "&dir=" + localStorage["destination.path"];
-	}
-	else if(localStorage["destination.type"] == "ask") {
-		var tpath = prompt("Please select a destination path: ", localStorage["destination.dynamicpath"]);
-		if((tpath == null) || (tpath.length <= 0)) {
-			return;
-		}
-
-		localStorage["destination.dynamicpath"] = tpath;
-		pdestinationpath = "&dir=" + tpath;
-	}
-	
 	/* set autostart argument */
 	var pautostart = "";
 	if(localStorage["other.autostart"] == "true") {
-		pautostart = "&autostart=1";
+		baseurl += "start1/";
 	}
 
 	/* send the urls */
-	urls = urls.join("\n");
-	xmlHttpSend(baseurl + encodeURI(urls) + pdestinationpath + pautostart);
+	urls = urls.join(" ");
+	xmlHttpSend(baseurl + encodeURI(urls));
 }
 
 function xmlHttpSend(request) {

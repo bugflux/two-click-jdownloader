@@ -1,5 +1,5 @@
 /* set defaults */
-var currentVersion = '2.2';
+var currentVersion = '2.3';
 
 if(localStorage['version'] != currentVersion) {
 	localStorage.clear();
@@ -26,7 +26,7 @@ if(localStorage['firstrun'] == null) {
 	/* other */
 	localStorage['other.autostart'] = true;
 
-	if(localStorage['version'] == '2.2') { // open the options page on new version launch
+	if(localStorage['version'] == '2.3') { // open the options page on new version launch
 		chrome.tabs.getAllInWindow(
 					undefined,
 					function(tabs) {

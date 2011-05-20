@@ -1,15 +1,15 @@
 /* set defaults */
-var currentVersion = '2.4';
+var currentVersion = '2.4.1';
 
 if(localStorage['version'] != currentVersion) {
-	localStorage.clear();
+	//localStorage.clear();
 	localStorage['version'] = currentVersion;
 }
 if(localStorage['firstrun'] == null) {
 	localStorage['firstrun'] = false;
 
 	/* destination */
-	localStorage['destination.port'] = '10025'; /* "specify", "ask" */
+	localStorage['destination.port'] = '10025';
 	localStorage['destination.address'] = '127.0.0.1'; 
 
 	/* accelerators */
@@ -26,14 +26,13 @@ if(localStorage['firstrun'] == null) {
 	/* other */
 	localStorage['other.autostart'] = true;
 
-	if(localStorage['version'] == '2.4') { // open the options page on new version launch
-		chrome.tabs.getAllInWindow(
-					undefined,
-					function(tabs) {
-						chrome.tabs.create({url: 'options.html', selected: true});
-					}
-				);
-	}
+	/* show the options page on first run */
+	chrome.tabs.getAllInWindow(
+			undefined,
+			function(tabs) {
+				chrome.tabs.create({url: 'options.html', selected: true});
+			}
+		);
 }
 
 /* handle communication with the contentscript */
@@ -46,6 +45,7 @@ chrome.extension.onRequest.addListener(
 				});
 		}
 		else if(request.command == 'sendUrls') {
+			console.debug('JDChrome, core.js: urls from hotkey or double click');
 			sendUrls(request.urls);
 		}
 	}
@@ -61,9 +61,11 @@ if(localStorage['controls.contextmenu'] == 'true') {
 
 	function onContextMenuClick(info, tab) {
 		if(info.selectionText) {
+			console.debug('JDChrome, core.js: selection from contextmenu');
 			sendUrls(extractUrls(info.selectionText));
 		}
 		else if(info.linkUrl) {
+			console.debug('JDChrome, core.js: href from context menu');
 			sendUrls([info.linkUrl]);
 		}
 	}
@@ -72,6 +74,9 @@ if(localStorage['controls.contextmenu'] == 'true') {
 
 /* send a bunch of links, considering the user's settings */
 function sendUrls(urls) {
+	console.debug('JDChrome, core.js: jdownloader ' + localStorage['destination.address'] + ':' + localStorage['destination.port']);
+	console.debug('JDChrome, core.js: autostart ' + localStorage['other.autostart']);
+	console.debug('JDChrome, core.js: sending urls ' + urls);
 	if((urls == null) || (urls.length <= 0)) {
 		return;
 	}
@@ -81,7 +86,6 @@ function sendUrls(urls) {
 		+ '/action/add/links/grabber0/start';
 
 	/* set autostart argument */
-	var pautostart = '';
 	if(localStorage['other.autostart'] == 'true') {
 		baseurl += '1/';
 	} else {
@@ -97,6 +101,7 @@ function sendUrls(urls) {
 }
 
 function xmlHttpSend(request) {
+	console.debug('JDChrome, core.js: http request ' + request);
 	if((request == null) || (request.length == 0)) {
 		return;
 	}

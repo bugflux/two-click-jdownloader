@@ -6,13 +6,12 @@ function extractUrls(text) {
 	}
 
 	var urls = text.match(/https?:\/\/.+\.[^\s]+/gi);
-	if(urls == null) {
-		return;
-	}
 
 	/* trim strings (match() already trims the beginning!) */
-	for(var r = 0; r < urls.length; r++) {
-		urls[r] = urls[r].replace(/\s*$/, '');
+	if(urls != null) {
+		for(var r = 0; r < urls.length; r++) {
+			urls[r] = urls[r].replace(/\s*$/, '');
+		}
 	}
 
 	return urls;

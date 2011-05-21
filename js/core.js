@@ -55,7 +55,7 @@ chrome.extension.onRequest.addListener(
 		}
 		else if(request.command == 'sendUrls') {
 			console.debug('JDChrome, core.js: urls from hotkey or double click');
-			sendUrls(request.urls, request.referer);
+			sendUrls(request.urls, request.referer, localStorage['other.autostart'] == 'true' ? true : false);
 		}
 	}
 );
@@ -63,25 +63,42 @@ chrome.extension.onRequest.addListener(
 /* create context menus */
 if(localStorage['controls.contextmenu'] == 'true') {
 	chrome.contextMenus.create({
-				'title': 'Send to JDownloader',
+				'title': 'Add to queue',
 				'contexts': [ 'selection', 'link', 'editable' ],
-				'onclick': onContextMenuClick
+				'onclick': onContextMenuClickAutostart
 			});
 
-	function onContextMenuClick(info, tab) {
+	function onContextMenuClickAutostart(info, tab) {
 		if(info.selectionText) {
 			console.debug('JDChrome, core.js: selection from contextmenu');
-			sendUrls(extractUrls(info.selectionText), info.pageUrl);
+			sendUrls(extractUrls(info.selectionText), info.pageUrl, true);
 		}
 		else if(info.linkUrl) {
 			console.debug('JDChrome, core.js: href from context menu');
-			sendUrls([info.linkUrl], info.pageUrl);
+			sendUrls([info.linkUrl], info.pageUrl, true);
+		}
+	}
+
+	chrome.contextMenus.create({
+				'title': 'Add to grabber',
+				'contexts': [ 'selection', 'link', 'editable' ],
+				'onclick': onContextMenuClickGrabber
+			});
+
+	function onContextMenuClickGrabber(info, tab) {
+		if(info.selectionText) {
+			console.debug('JDChrome, core.js: selection from contextmenu');
+			sendUrls(extractUrls(info.selectionText), info.pageUrl, false);
+		}
+		else if(info.linkUrl) {
+			console.debug('JDChrome, core.js: href from context menu');
+			sendUrls([info.linkUrl], info.pageUrl, false);
 		}
 	}
 }
 
 /* send a bunch of links, considering the user's settings */
-function sendUrls(urls, referer) {
+function sendUrls(urls, referer, autostart) {
 	console.debug('JDChrome, core.js: jdownloader ' + localStorage['destination.address'] + ':' + localStorage['destination.port']);
 	console.debug('JDChrome, core.js: autostart ' + localStorage['other.autostart']);
 	console.debug('JDChrome, core.js: sending urls ' + urls);
@@ -96,7 +113,7 @@ function sendUrls(urls, referer) {
 	requestUrl += 'referer=' + encodeURIComponent(referer);
 
 	/* set autostart */
-	if(localStorage['other.autostart'] == 'true') {
+	if(autostart == true) {
 		requestUrl += '&autostart=1';
 	}
 

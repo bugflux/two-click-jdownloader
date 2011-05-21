@@ -55,7 +55,7 @@ chrome.extension.onRequest.addListener(
 		}
 		else if(request.command == 'sendUrls') {
 			console.debug('JDChrome, core.js: urls from hotkey or double click');
-			sendUrls(request.urls);
+			sendUrls(request.urls, request.referer);
 		}
 	}
 );
@@ -71,17 +71,17 @@ if(localStorage['controls.contextmenu'] == 'true') {
 	function onContextMenuClick(info, tab) {
 		if(info.selectionText) {
 			console.debug('JDChrome, core.js: selection from contextmenu');
-			sendUrls(extractUrls(info.selectionText));
+			sendUrls(extractUrls(info.selectionText), info.pageUrl);
 		}
 		else if(info.linkUrl) {
 			console.debug('JDChrome, core.js: href from context menu');
-			sendUrls([info.linkUrl]);
+			sendUrls([info.linkUrl], info.pageUrl);
 		}
 	}
 }
 
 /* send a bunch of links, considering the user's settings */
-function sendUrls(urls) {
+function sendUrls(urls, referer) {
 	console.debug('JDChrome, core.js: jdownloader ' + localStorage['destination.address'] + ':' + localStorage['destination.port']);
 	console.debug('JDChrome, core.js: autostart ' + localStorage['other.autostart']);
 	console.debug('JDChrome, core.js: sending urls ' + urls);
@@ -90,11 +90,14 @@ function sendUrls(urls) {
 	}
 
 	/* set baseurl */
-	var requestUrl = "/flashgot?";
+	var requestUrl = '/flashgot?';
+
+	/* set referer */
+	requestUrl += 'referer=' + encodeURIComponent(referer);
 
 	/* set autostart */
 	if(localStorage['other.autostart'] == 'true') {
-		requestUrl += 'autostart=1';
+		requestUrl += '&autostart=1';
 	}
 
 	/* set urls */

@@ -135,7 +135,8 @@ function extractHost(url) {
 function sendUrls(urls) {
 	chrome.extension.sendRequest({
 				command : 'sendUrls',
-				urls: urls
+				urls: urls,
+				referer: document.URL
 			});
 }
 

@@ -1,12 +1,6 @@
 @charset "UTF-8";
 /* CSS Document */
 
-#jDownloaderForm > label {
-	width: 130px;
-	float: left;
-	margin-top: 5px;
-}
-
 body {
 	background-color:#e6ac02;
 	color:#333;

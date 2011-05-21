@@ -1,15 +1,15 @@
 /* set defaults */
-var currentVersion = '2.4.1';
+var currentVersion = '2.5';
 
 if(localStorage['version'] != currentVersion) {
-	//localStorage.clear();
+	localStorage.clear();
 	localStorage['version'] = currentVersion;
 }
 if(localStorage['firstrun'] == null) {
 	localStorage['firstrun'] = false;
 
 	/* destination */
-	localStorage['destination.port'] = '10025';
+	localStorage['destination.port'] = '9666';
 	localStorage['destination.address'] = '127.0.0.1'; 
 
 	/* accelerators */
@@ -31,6 +31,15 @@ if(localStorage['firstrun'] == null) {
 			undefined,
 			function(tabs) {
 				chrome.tabs.create({url: 'options.html', selected: true});
+			}
+		);
+
+	/* have people read the requirements */
+	alert('Please read the requirements for the new JDChrome version!');
+	chrome.tabs.getAllInWindow(
+			undefined,
+			function(tabs) {
+				chrome.tabs.create({url: 'https://chrome.google.com/webstore/detail/ljhooappahaeilmbekgcokgjjplambgo', selected: true});
 			}
 		);
 }
@@ -71,7 +80,6 @@ if(localStorage['controls.contextmenu'] == 'true') {
 	}
 }
 
-
 /* send a bunch of links, considering the user's settings */
 function sendUrls(urls) {
 	console.debug('JDChrome, core.js: jdownloader ' + localStorage['destination.address'] + ':' + localStorage['destination.port']);
@@ -81,23 +89,19 @@ function sendUrls(urls) {
 		return;
 	}
 
-	var baseurl = 'http://' + localStorage['destination.address']
-		+ ':' + localStorage['destination.port']
-		+ '/action/add/links/grabber0/start';
+	/* set baseurl */
+	var requestUrl = "/flashgot?";
 
-	/* set autostart argument */
+	/* set autostart */
 	if(localStorage['other.autostart'] == 'true') {
-		baseurl += '1/';
-	} else {
-		baseurl += '0/';
+		requestUrl += 'autostart=1';
 	}
 
-	/* send the urls */
-	// one by one because JD is buggy
-	for(var r = 0; r < urls.length; r++) {
-		xmlHttpSend(baseurl + urls[r]);
-	}
-	//xmlHttpSend(baseurl + urls.join(' '));
+	/* set urls */
+	requestUrl += '&urls=' + encodeURIComponent(urls.join('\n'));
+
+	/* send urls */
+	xmlHttpSend(requestUrl);
 }
 
 function xmlHttpSend(request) {
@@ -106,8 +110,11 @@ function xmlHttpSend(request) {
 		return;
 	}
 
+	var baseurl = 'http://' + localStorage['destination.address']
+			+ ':' + localStorage['destination.port'];
+
 	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open('GET', request, false);
+	xmlHttp.open('GET', baseurl + request, false);
 	xmlHttp.send(null);
 }
 

@@ -20,12 +20,13 @@
 		<div class="form1">
 		<form id="jDownloaderForm">
 			<h2>JDownloader</h2>
-			<label>Remote Control port:</label>
-			<input class="text" type="text" size="12" id="destination.port" onKeyUp="event.initKeyboardEvent(); save_options();">
-			<br/>
-
-			<label>Address (if remote):</label>
+			<label>Address:</label>
 			<input class="text" type="text" size="12" id="destination.address" onKeyUp="event.initKeyboardEvent(); save_options();">
+			<img class="info" id="info.alert.address" src="png/advert.png"
+			onmouseover="tooltipon('info.alert.address', '127.0.0.1 is your pc. '
+			+ 'remote addresses only work with nightly version of jdownloader, '
+			+ 'and someone at the server needs to accept your links at least once!');"
+			onmouseout="tooltipoff();" />
 			<br />
 		</form>
 	</div>

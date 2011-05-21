@@ -37,13 +37,6 @@ function writeAccelerator() {
 /* save options to local storage */
 function save_options() {
 	/* save destination options */
-	var destinationPort = document.getElementById('destination.port').value;
-	if(isNaN(destinationPort) || destinationPort < 1 || destinationPort > 65535) {
-		alert('Invalid port number specified!');
-	} else {
-		localStorage['destination.port'] = destinationPort;
-	}
-
 	var destinationAddress = document.getElementById('destination.address').value;
 	if(!destinationAddress || destinationAddress.length == 0) {
 		localStorage['destination.address'] = '127.0.0.1';
@@ -73,7 +66,6 @@ function save_options() {
 /* load options from local storage */
 function load_options() {
 	/* load destination option */
-	document.getElementById('destination.port').value = localStorage['destination.port'];
 	document.getElementById('destination.address').value = localStorage['destination.address'];
 
 	/* load doubleclick option */

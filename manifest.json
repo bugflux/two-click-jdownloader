@@ -1,6 +1,6 @@
 {
 	"name": "JDChrome",
-	"version": "2.5",
+	"version": "2.6",
 	"description": "JDownloader support for Chrome",
 
 	"background_page": "background.html",

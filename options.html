@@ -22,8 +22,8 @@
 			<h2>JDownloader</h2>
 			<label>Address:</label>
 			<input class="text" type="text" size="12" id="destination.address" onKeyUp="event.initKeyboardEvent(); save_options();">
-			<img class="info" id="info.alert.address" src="png/advert.png"
-			onmouseover="tooltipon('info.alert.address', '127.0.0.1 is your pc. '
+			<img class="info" id="info.inform.address" src="png/inform.png"
+			onmouseover="tooltipon('info.inform.address', '127.0.0.1 is your pc. '
 			+ 'remote addresses only work with nightly version of jdownloader, '
 			+ 'and someone at the server needs to accept your links at least once!');"
 			onmouseout="tooltipoff();" />
@@ -42,16 +42,6 @@
 			onmouseout="tooltipoff();" />
 			<br />
 
-			<input type="checkbox" class="checkbox" id="controls.contextmenu" onChange="save_options();"
-			onmouseover="tooltipon('controls.contextmenu', 'Add a Right-Click option to send a selection or link to JDownloader');"
-			onmouseout="tooltipoff();">
-			<label>Context Menu</label>
-			<img class="info" id="info.alert.contextmenu" src="png/alert.png"
-			onmouseover="tooltipon('info.alert.contextmenu',
-			'Changing this is only effective when the extension is reloaded (ex: chrome restart)');"
-			onmouseout="tooltipoff();" />
-			<br />
-
 			<input type="checkbox" class="checkbox" id="controls.accelerator" onChange="save_options();"
 			onmouseover="tooltipon('controls.accelerator', 'Pressing this key combination will send the selected links to JDonwloader');"
 			onmouseout="tooltipoff();">
@@ -59,6 +49,26 @@
 				<input type="text" class="text" id="accelerator" style="width: 120px" onKeyDown="setAccelerator(event); save_options();">
 			<img class="info" id="info.alert.accelerator" src="png/advert.png"
 			onmouseover="tooltipon('info.alert.accelerator', 'Changing this is only effective on new or reloaded tabs');"
+			onmouseout="tooltipoff();" />
+
+			<h2>Context menu:</h2>
+			<input type="checkbox" class="checkbox" id="controls.contextmenu.queue" onChange="save_options();"
+			onmouseover="tooltipon('controls.contextmenu.queue', 'Add a Right-Click option to automatically download a selection or link')"
+			onmouseout="tooltipoff();">
+			<label>Add to queue</label>
+			<img class="info" id="info.alert.queue" src="png/alert.png"
+			onmouseover="tooltipon('info.alert.queue',
+			'Changing this is only effective when the extension is reloaded (ex: chrome restart)');"
+			onmouseout="tooltipoff();" />
+			<br />
+
+			<input type="checkbox" class="checkbox" id="controls.contextmenu.grabber" onChange="save_options();"
+			onmouseover="tooltipon('controls.contextmenu.grabber', 'Add a Right-Click option to send a selection or link to the grabber')"
+			onmouseout="tooltipoff();">
+			<label>Add to grabber</label>
+			<img class="info" id="info.alert.grabber" src="png/alert.png"
+			onmouseover="tooltipon('info.alert.grabber',
+			'Changing this is only effective when the extension is reloaded (ex: chrome restart)');"
 			onmouseout="tooltipoff();" />
 		</form>
     </div>

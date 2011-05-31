@@ -46,11 +46,13 @@ function save_options() {
 
 	/* enable/disable controls */
 	var doubleclickSet = document.getElementById('controls.doubleclick').checked;
-	var contextmenuSet = document.getElementById('controls.contextmenu').checked;
 	var acceleratorSet = document.getElementById('controls.accelerator').checked;
+	var contextmenuQSet = document.getElementById('controls.contextmenu.queue').checked;
+	var contextmenuGSet = document.getElementById('controls.contextmenu.grabber').checked;
 
 	localStorage['controls.doubleclick'] = doubleclickSet;
-	localStorage['controls.contextmenu'] = contextmenuSet;
+	localStorage['controls.contextmenu.queue'] = contextmenuQSet;
+	localStorage['controls.contextmenu.grabber'] = contextmenuGSet;
 	localStorage['controls.accelerator'] = acceleratorSet;
 
 	/* save accelerator keys */
@@ -70,8 +72,9 @@ function load_options() {
 
 	/* load doubleclick option */
 	document.getElementById('controls.doubleclick').checked = localStorage['controls.doubleclick'] == 'true';
-	document.getElementById('controls.contextmenu').checked = localStorage['controls.contextmenu'] == 'true';
 	document.getElementById('controls.accelerator').checked = localStorage['controls.accelerator'] == 'true';
+	document.getElementById('controls.contextmenu.queue').checked = localStorage['controls.contextmenu.queue'] == 'true';
+	document.getElementById('controls.contextmenu.grabber').checked = localStorage['controls.contextmenu.grabber'] == 'true';
 
 	/* load accelerator */
 	accelerator = {

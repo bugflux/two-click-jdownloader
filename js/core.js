@@ -1,5 +1,5 @@
 /* set defaults */
-var currentVersion = '2.5';
+var currentVersion = '2.6';
 
 if(localStorage['version'] != currentVersion) {
 	localStorage.clear();
@@ -20,8 +20,9 @@ if(localStorage['firstrun'] == null) {
 	
 	/* controls */
 	localStorage['controls.doubleclick'] = true;
-	localStorage['controls.contextmenu'] = true;
 	localStorage['controls.accelerator'] = true;
+	localStorage['controls.contextmenu.queue'] = true;
+	localStorage['controls.contextmenu.grabber'] = true;
 
 	/* other */
 	localStorage['other.autostart'] = true;
@@ -31,15 +32,6 @@ if(localStorage['firstrun'] == null) {
 			undefined,
 			function(tabs) {
 				chrome.tabs.create({url: 'options.html', selected: true});
-			}
-		);
-
-	/* have people read the requirements */
-	alert('Please read the requirements for the new JDChrome version!');
-	chrome.tabs.getAllInWindow(
-			undefined,
-			function(tabs) {
-				chrome.tabs.create({url: 'https://chrome.google.com/webstore/detail/ljhooappahaeilmbekgcokgjjplambgo', selected: true});
 			}
 		);
 }
@@ -61,7 +53,7 @@ chrome.extension.onRequest.addListener(
 );
 
 /* create context menus */
-if(localStorage['controls.contextmenu'] == 'true') {
+if(localStorage['controls.contextmenu.queue'] == 'true') {
 	chrome.contextMenus.create({
 				'title': 'Add to queue',
 				'contexts': [ 'selection', 'link', 'editable' ],
@@ -78,7 +70,9 @@ if(localStorage['controls.contextmenu'] == 'true') {
 			sendUrls([info.linkUrl], info.pageUrl, true);
 		}
 	}
+}
 
+if(localStorage['controls.contextmenu.grabber'] == 'true') {
 	chrome.contextMenus.create({
 				'title': 'Add to grabber',
 				'contexts': [ 'selection', 'link', 'editable' ],

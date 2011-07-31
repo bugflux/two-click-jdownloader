@@ -1,5 +1,5 @@
 /* set defaults */
-var currentVersion = '2.6';
+var currentVersion = '2.6.5';
 
 if(localStorage['version'] != currentVersion) {
 	localStorage.clear();
